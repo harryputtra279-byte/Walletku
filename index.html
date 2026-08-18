@@ -7,106 +7,2134 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Dompet Harry</title>
-<style>
-:root{--bg:#f4f6fb;--glass:rgba(255,255,255,.64);--glass2:rgba(255,255,255,.82);--line:rgba(255,255,255,.72);--txt:#151827;--muted:#73798b;--blue:#00d878;--red:#ff5f6d;--green:#00e676;--shadow:0 18px 45px rgba(34,39,72,.09)}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--txt);background:radial-gradient(circle at 20% 0%,#dfe7ff 0,#f4f6fb 34%),var(--bg)}
-body{padding-bottom:88px}.app{max-width:700px;margin:auto;padding:18px 16px 30px}.top{display:flex;justify-content:space-between;align-items:center;padding:8px 4px 20px}.brand{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:15px;background:linear-gradient(145deg,#00f58a,#00b85a);color:#fff;display:grid;place-items:center;font-weight:900;box-shadow:0 8px 20px #00c96838}h1{font-size:21px;margin:0}.muted{color:var(--muted);font-size:12px}.iconbtn{border:0;background:var(--glass2);backdrop-filter:blur(22px);width:42px;height:42px;border-radius:15px;box-shadow:var(--shadow);font-size:19px}
-.glass{background:var(--glass);backdrop-filter:blur(28px) saturate(140%);-webkit-backdrop-filter:blur(28px) saturate(140%);border:1px solid var(--line);box-shadow:var(--shadow)}
-.hero{border-radius:28px;padding:21px;margin-bottom:13px}.heroTop{display:flex;justify-content:space-between;align-items:center}.hero h2{margin:6px 0;font-size:31px;letter-spacing:-.8px}.month{border:1px solid #fff;background:#ffffff9c;border-radius:13px;padding:9px 10px}.month select{border:0;background:transparent;font-weight:700;outline:0}.minirow{display:flex;gap:10px;margin-top:14px}.mini{flex:1;background:#ffffff78;border-radius:16px;padding:11px}.mini span{display:block;font-size:11px;color:var(--muted)}.mini b{display:block;margin-top:4px;font-size:14px}.red{color:var(--red)}.green{color:var(--green)}
-.quick{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:13px}.q{border-radius:22px;padding:16px;border:0;text-align:left}.q .round{width:35px;height:35px;border-radius:12px;display:grid;place-items:center;margin-bottom:10px;background:#ffffffa8;font-size:18px}.q b{font-size:14px}.q p{margin:4px 0 0;color:var(--muted);font-size:11px}.q.debit{background:linear-gradient(145deg,#fff4f5aa,#ffffff70)}.q.credit{background:linear-gradient(145deg,#effbf6aa,#ffffff70)}
-.panel{border-radius:24px;padding:16px;margin-bottom:13px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.head h3{margin:0;font-size:16px}.link{border:0;background:transparent;color:var(--blue);font-size:12px;font-weight:700}
-.tx{display:flex;align-items:center;gap:11px;padding:12px 2px;border-bottom:1px solid #ffffff9c}.tx:last-child{border-bottom:0}.cat{width:42px;height:42px;border-radius:14px;background:#ffffffb5;display:grid;place-items:center;font-size:19px}.txmain{flex:1;min-width:0}.txmain b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.txmain span{font-size:11px;color:var(--muted)}.money{font-weight:800;font-size:12px}.del{border:0;background:transparent;color:#a0a5b2;padding:6px}.empty{text-align:center;color:var(--muted);padding:30px 5px;font-size:13px}
-.form{display:grid;gap:10px}.field label{font-size:11px;color:var(--muted);display:block;margin:0 0 5px 3px}.field input,.field select{width:100%;border:1px solid #fff;background:#ffffffb8;border-radius:14px;padding:12px;outline:0}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.primary{width:100%;border:0;border-radius:16px;padding:13px;background:linear-gradient(145deg,#696be9,#5052cc);color:#fff;font-weight:800;box-shadow:0 10px 22px #595bd83b}
-.chart{height:145px;display:flex;align-items:end;gap:7px;padding:10px 2px 2px}.bar{flex:1;min-width:5px;border-radius:8px 8px 4px 4px;background:linear-gradient(#00f58a,#00c853);opacity:.8}.labels{display:flex;justify-content:space-between;color:var(--muted);font-size:9px;padding:0 4px}
-.history{display:grid;gap:8px}.monthcard{display:flex;justify-content:space-between;align-items:center;padding:13px;border-radius:15px;background:#ffffff72}.monthcard span{font-size:11px;color:var(--muted)}.monthcard b{font-size:12px}
-.nav{position:fixed;z-index:5;left:50%;bottom:12px;transform:translateX(-50%);width:min(668px,calc(100% - 24px));display:flex;justify-content:space-around;padding:8px;border-radius:24px;background:#ffffffb8;backdrop-filter:blur(30px);border:1px solid #fff;box-shadow:0 14px 40px #20254122}.nav button{border:0;background:transparent;padding:9px 16px;border-radius:15px;color:var(--muted);font-size:10px}.nav button.active{background:#d8ffe9;color:#009f4f;font-weight:800}.fab{position:fixed;right:18px;bottom:82px;width:56px;height:56px;border-radius:19px;border:0;background:linear-gradient(145deg,#00f58a,#00b85a);color:#062313;font-size:25px;box-shadow:0 13px 28px #5153d64d}
-.toast{position:fixed;z-index:20;left:50%;bottom:85px;transform:translate(-50%,20px);background:#171a29;color:#fff;padding:11px 15px;border-radius:13px;opacity:0;transition:.25s;font-size:12px}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(min-width:650px){.app{padding-top:28px}.fab{right:calc(50% - 335px)}}
 
-.pin-overlay{position:fixed;inset:0;z-index:99;background:rgba(6,8,13,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:center;padding:20px}.pin-overlay.hidden{display:none}.pin-card{width:min(360px,100%);padding:24px;border-radius:28px;background:rgba(29,33,42,.94);border:1px solid rgba(255,255,255,.12);box-shadow:0 25px 70px rgba(0,0,0,.4);color:#fff;text-align:center}.pin-card h2{margin:0 0 8px;font-size:22px}.pin-card p{margin:0 0 16px;color:#adb4c1;font-size:12px;line-height:1.45}.pin-input{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:#fff;border-radius:16px;padding:15px;text-align:center;font-size:25px;letter-spacing:9px;outline:none}.pin-btn{width:100%;margin-top:12px;border:0;border-radius:16px;padding:14px;background:linear-gradient(145deg,#00f58a,#00b85a);color:#062313;font-weight:900}.pin-secondary{margin-top:10px;border:0;background:transparent;color:#00e676;font-size:12px;padding:8px}
+<title>Dompet Harry</title>
+
+<style>
+:root{
+--bg:#f4f6fb;
+--glass:rgba(255,255,255,.64);
+--glass2:rgba(255,255,255,.82);
+--line:rgba(255,255,255,.72);
+--txt:#151827;
+--muted:#73798b;
+--blue:#00d878;
+--red:#ff5f6d;
+--green:#00e676;
+--shadow:0 18px 45px rgba(34,39,72,.09)
+}
+
+*{box-sizing:border-box}
+
+html,body{
+margin:0;
+min-height:100%;
+font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+color:var(--txt);
+background:radial-gradient(circle at 20% 0%,#dfe7ff 0,#f4f6fb 34%),var(--bg)
+}
+
+body{padding-bottom:88px}
+
+.app{
+max-width:700px;
+margin:auto;
+padding:18px 16px 30px
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:8px 4px 20px
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:11px
+}
+
+.logo{
+width:42px;
+height:42px;
+border-radius:15px;
+background:linear-gradient(145deg,#00f58a,#00b85a);
+color:#fff;
+display:grid;
+place-items:center;
+font-weight:900;
+box-shadow:0 8px 20px #00c96838
+}
+
+h1{
+font-size:21px;
+margin:0
+}
+
+.muted{
+color:var(--muted);
+font-size:12px
+}
+
+.iconbtn{
+border:0;
+background:var(--glass2);
+backdrop-filter:blur(22px);
+width:42px;
+height:42px;
+border-radius:15px;
+box-shadow:var(--shadow);
+font-size:19px
+}
+
+.glass{
+background:var(--glass);
+backdrop-filter:blur(28px) saturate(140%);
+-webkit-backdrop-filter:blur(28px) saturate(140%);
+border:1px solid var(--line);
+box-shadow:var(--shadow)
+}
+
+.hero{
+border-radius:28px;
+padding:21px;
+margin-bottom:13px
+}
+
+.heroTop{
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+
+.hero h2{
+margin:6px 0;
+font-size:31px;
+letter-spacing:-.8px
+}
+
+.month{
+border:1px solid #fff;
+background:#ffffff9c;
+border-radius:13px;
+padding:9px 10px
+}
+
+.month select{
+border:0;
+background:transparent;
+font-weight:700;
+outline:0
+}
+
+.minirow{
+display:flex;
+gap:10px;
+margin-top:14px
+}
+
+.mini{
+flex:1;
+background:#ffffff78;
+border-radius:16px;
+padding:11px
+}
+
+.mini span{
+display:block;
+font-size:11px;
+color:var(--muted)
+}
+
+.mini b{
+display:block;
+margin-top:4px;
+font-size:14px
+}
+
+.red{color:var(--red)}
+.green{color:var(--green)}
+
+.quick{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-bottom:13px
+}
+
+.q{
+border-radius:22px;
+padding:16px;
+border:0;
+text-align:left
+}
+
+.q .round{
+width:35px;
+height:35px;
+border-radius:12px;
+display:grid;
+place-items:center;
+margin-bottom:10px;
+background:#ffffffa8;
+font-size:18px
+}
+
+.q b{font-size:14px}
+
+.q p{
+margin:4px 0 0;
+color:var(--muted);
+font-size:11px
+}
+
+.q.debit{
+background:linear-gradient(145deg,#fff4f5aa,#ffffff70)
+}
+
+.q.credit{
+background:linear-gradient(145deg,#effbf6aa,#ffffff70)
+}
+
+.panel{
+border-radius:24px;
+padding:16px;
+margin-bottom:13px
+}
+
+.head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:12px
+}
+
+.head h3{
+margin:0;
+font-size:16px
+}
+
+.link{
+border:0;
+background:transparent;
+color:var(--blue);
+font-size:12px;
+font-weight:700
+}
+
+.tx{
+display:flex;
+align-items:center;
+gap:11px;
+padding:12px 2px;
+border-bottom:1px solid #ffffff9c
+}
+
+.tx:last-child{border-bottom:0}
+
+.cat{
+width:42px;
+height:42px;
+border-radius:14px;
+background:#ffffffb5;
+display:grid;
+place-items:center;
+font-size:19px
+}
+
+.txmain{
+flex:1;
+min-width:0
+}
+
+.txmain b{
+display:block;
+font-size:13px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis
+}
+
+.txmain span{
+font-size:11px;
+color:var(--muted)
+}
+
+.money{
+font-weight:800;
+font-size:12px
+}
+
+.del{
+border:0;
+background:transparent;
+color:#a0a5b2;
+padding:6px
+}
+
+.empty{
+text-align:center;
+color:var(--muted);
+padding:30px 5px;
+font-size:13px
+}
+
+.form{
+display:grid;
+gap:10px
+}
+
+.field label{
+font-size:11px;
+color:var(--muted);
+display:block;
+margin:0 0 5px 3px
+}
+
+.field input,
+.field select{
+width:100%;
+border:1px solid #fff;
+background:#ffffffb8;
+border-radius:14px;
+padding:12px;
+outline:0
+}
+
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:9px
+}
+
+.primary{
+width:100%;
+border:0;
+border-radius:16px;
+padding:13px;
+background:linear-gradient(145deg,#00f58a,#00b85a);
+color:#062313;
+font-weight:800;
+box-shadow:0 10px 22px #00c8533b
+}
+
+.chart{
+height:145px;
+display:flex;
+align-items:end;
+gap:7px;
+padding:10px 2px 2px
+}
+
+.bar{
+flex:1;
+min-width:5px;
+border-radius:8px 8px 4px 4px;
+background:linear-gradient(#00f58a,#00c853);
+opacity:.8
+}
+
+.labels{
+display:flex;
+justify-content:space-between;
+color:var(--muted);
+font-size:9px;
+padding:0 4px
+}
+
+.history{
+display:grid;
+gap:8px
+}
+
+.monthcard{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:13px;
+border-radius:15px;
+background:#ffffff72
+}
+
+.monthcard span{
+font-size:11px;
+color:var(--muted)
+}
+
+.monthcard b{
+font-size:12px
+}
+
+.nav{
+position:fixed;
+z-index:5;
+left:50%;
+bottom:12px;
+transform:translateX(-50%);
+width:min(668px,calc(100% - 24px));
+display:flex;
+justify-content:space-around;
+padding:8px;
+border-radius:24px;
+background:#ffffffb8;
+backdrop-filter:blur(30px);
+border:1px solid #fff;
+box-shadow:0 14px 40px #20254122
+}
+
+.nav button{
+border:0;
+background:transparent;
+padding:9px 16px;
+border-radius:15px;
+color:var(--muted);
+font-size:10px
+}
+
+.nav button.active{
+background:#d8ffe9;
+color:#009f4f;
+font-weight:800
+}
+
+.fab{
+position:fixed;
+right:18px;
+bottom:82px;
+width:56px;
+height:56px;
+border-radius:19px;
+border:0;
+background:linear-gradient(145deg,#00f58a,#00b85a);
+color:#062313;
+font-size:25px;
+box-shadow:0 13px 28px #00c8534d
+}
+
+.toast{
+position:fixed;
+z-index:200;
+left:50%;
+bottom:85px;
+transform:translate(-50%,20px);
+background:#171a29;
+color:#fff;
+padding:11px 15px;
+border-radius:13px;
+opacity:0;
+transition:.25s;
+font-size:12px;
+pointer-events:none
+}
+
+.toast.show{
+opacity:1;
+transform:translate(-50%,0)
+}
+
+.pin-overlay{
+position:fixed;
+inset:0;
+z-index:99;
+background:rgba(6,8,13,.82);
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px
+}
+
+.pin-overlay.hidden{display:none}
+
+.pin-card{
+width:min(360px,100%);
+padding:24px;
+border-radius:28px;
+background:rgba(29,33,42,.94);
+border:1px solid rgba(255,255,255,.12);
+box-shadow:0 25px 70px rgba(0,0,0,.4);
+color:#fff;
+text-align:center
+}
+
+.pin-card h2{
+margin:0 0 8px;
+font-size:22px
+}
+
+.pin-card p{
+margin:0 0 16px;
+color:#adb4c1;
+font-size:12px;
+line-height:1.45
+}
+
+.pin-input{
+width:100%;
+box-sizing:border-box;
+border:1px solid rgba(255,255,255,.12);
+background:rgba(255,255,255,.07);
+color:#fff;
+border-radius:16px;
+padding:15px;
+text-align:center;
+font-size:25px;
+letter-spacing:9px;
+outline:none
+}
+
+.pin-btn{
+width:100%;
+margin-top:12px;
+border:0;
+border-radius:16px;
+padding:14px;
+background:linear-gradient(145deg,#00f58a,#00b85a);
+color:#062313;
+font-weight:900
+}
+
+.pin-secondary{
+margin-top:10px;
+border:0;
+background:transparent;
+color:#00e676;
+font-size:12px;
+padding:8px
+}
+
+/* Backup / Restore */
+.backup-card{
+margin-top:13px
+}
+
+.backup-buttons{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px
+}
+
+.backup-btn{
+border:0;
+border-radius:16px;
+padding:13px 10px;
+font-weight:800;
+font-size:12px
+}
+
+.backup-btn.backup{
+background:linear-gradient(145deg,#00f58a,#00b85a);
+color:#062313;
+box-shadow:0 10px 22px #00c8533b
+}
+
+.backup-btn.restore{
+background:#ffffffb8;
+color:#009f4f;
+border:1px solid #ffffff
+}
+
+.backup-note{
+margin:10px 2px 0;
+font-size:10px;
+color:var(--muted);
+line-height:1.5
+}
+
+.security-note{
+font-size:10px;
+color:var(--muted);
+line-height:1.5;
+margin-top:8px
+}
+
+@media(min-width:650px){
+.app{padding-top:28px}
+.fab{right:calc(50% - 335px)}
+}
 </style>
 </head>
+
 <body>
+
 <main class="app">
-<header class="top"><div class="brand"><div class="logo">₿</div><div><h1>Dompet Harry</h1><div class="muted">Keuangan pribadi</div></div></div><div style="display:flex;gap:7px"><button class="iconbtn" onclick="pinSetup()" title="PIN 6 digit">🔐</button><button class="iconbtn" onclick="exportData()" title="Backup">↥</button></div></header>
+
+<header class="top">
+
+<div class="brand">
+<div class="logo">₿</div>
+<div>
+<h1>Dompet Harry</h1>
+<div class="muted">Keuangan pribadi</div>
+</div>
+</div>
+
+<div style="display:flex;gap:7px">
+
+<button class="iconbtn"
+onclick="pinSetup()"
+title="PIN 6 digit">🔐</button>
+
+<button class="iconbtn"
+onclick="backupData()"
+title="Backup terenkripsi">↥</button>
+
+</div>
+
+</header>
+
 
 <section class="glass hero">
- <div class="heroTop"><div><div class="muted">Saldo bersih bulan ini</div><h2 id="balance">Rp0</h2></div><div class="month"><select id="month" onchange="render()"></select></div></div>
- <div class="minirow"><div class="mini"><span>Pengeluaran</span><b class="red" id="expense">Rp0</b></div><div class="mini"><span>Pemasukan</span><b class="green" id="income">Rp0</b></div></div>
+
+<div class="heroTop">
+
+<div>
+<div class="muted">Saldo bersih bulan ini</div>
+<h2 id="balance">Rp0</h2>
+</div>
+
+<div class="month">
+<select id="month" onchange="render()"></select>
+</div>
+
+</div>
+
+<div class="minirow">
+
+<div class="mini">
+<span>Pengeluaran</span>
+<b class="red" id="expense">Rp0</b>
+</div>
+
+<div class="mini">
+<span>Pemasukan</span>
+<b class="green" id="income">Rp0</b>
+</div>
+
+</div>
+
 </section>
+
 
 <section class="quick">
- <button class="glass q debit" onclick="setType('debit')"><div class="round">↓</div><b>Catat pengeluaran</b><p>Debit / uang keluar</p></button>
- <button class="glass q credit" onclick="setType('credit')"><div class="round">↑</div><b>Catat pemasukan</b><p>Kredit / uang masuk</p></button>
+
+<button class="glass q debit" onclick="setType('debit')">
+<div class="round">↓</div>
+<b>Catat pengeluaran</b>
+<p>Debit / uang keluar</p>
+</button>
+
+<button class="glass q credit" onclick="setType('credit')">
+<div class="round">↑</div>
+<b>Catat pemasukan</b>
+<p>Kredit / uang masuk</p>
+</button>
+
 </section>
+
 
 <section class="glass panel" id="add">
- <div class="head"><h3>Tambah transaksi</h3><button class="link" onclick="resetForm()">Reset</button></div>
- <form class="form" onsubmit="addTx(event)">
-  <div class="row"><div class="field"><label>Tanggal</label><input id="date" type="date" required></div><div class="field"><label>Tipe</label><select id="type"><option value="debit">Debit</option><option value="credit">Kredit</option></select></div></div>
-  <div class="field"><label>Keterangan</label><input id="desc" placeholder="Contoh: Belanja bulanan" required></div>
-  <div class="row"><div class="field"><label>Kategori</label><select id="cat"><option>🍜 Makanan</option><option>🚗 Transportasi</option><option>🏠 Rumah</option><option>💡 Tagihan</option><option>🛍️ Belanja</option><option>🎮 Hiburan</option><option>💊 Kesehatan</option><option>📚 Pendidikan</option><option>📈 Investasi</option><option>💼 Gaji</option><option>🎁 Bonus</option><option>📦 Lainnya</option></select></div><div class="field"><label>Nominal (Rp)</label><input id="amount" type="number" min="1" required placeholder="50000"></div></div>
-  <button class="primary">Simpan transaksi</button>
- </form>
+
+<div class="head">
+<h3>Tambah transaksi</h3>
+<button class="link" onclick="resetForm()">Reset</button>
+</div>
+
+<form class="form" onsubmit="addTx(event)">
+
+<div class="row">
+
+<div class="field">
+<label>Tanggal</label>
+<input id="date" type="date" required>
+</div>
+
+<div class="field">
+<label>Tipe</label>
+<select id="type">
+<option value="debit">Debit</option>
+<option value="credit">Kredit</option>
+</select>
+</div>
+
+</div>
+
+<div class="field">
+<label>Keterangan</label>
+<input id="desc" placeholder="Contoh: Belanja bulanan" required>
+</div>
+
+<div class="row">
+
+<div class="field">
+<label>Kategori</label>
+
+<select id="cat">
+<option>🍜 Makanan</option>
+<option>🚗 Transportasi</option>
+<option>🏠 Rumah</option>
+<option>💡 Tagihan</option>
+<option>🛍️ Belanja</option>
+<option>🎮 Hiburan</option>
+<option>💊 Kesehatan</option>
+<option>📚 Pendidikan</option>
+<option>📈 Investasi</option>
+<option>💼 Gaji</option>
+<option>🎁 Bonus</option>
+<option>📦 Lainnya</option>
+</select>
+
+</div>
+
+<div class="field">
+<label>Nominal (Rp)</label>
+<input id="amount" type="number" min="1" required placeholder="50000">
+</div>
+
+</div>
+
+<button class="primary">Simpan transaksi</button>
+
+</form>
+
 </section>
 
-<section class="glass panel"><div class="head"><h3>Pengeluaran 7 hari terakhir</h3><span class="muted" id="weekTotal">Rp0</span></div><div class="chart" id="chart"></div><div class="labels"><span>7h lalu</span><span>Hari ini</span></div></section>
 
-<section class="glass panel"><div class="head"><h3>Transaksi terbaru</h3><button class="link" onclick="showAll()">Semua</button></div><div id="transactions"></div></section>
+<section class="glass panel">
 
-<section class="glass panel"><div class="head"><h3>Riwayat bulanan</h3><span class="muted">Tidak dihapus</span></div><div id="history" class="history"></div></section>
+<div class="head">
+<h3>Pengeluaran 7 hari terakhir</h3>
+<span class="muted" id="weekTotal">Rp0</span>
+</div>
+
+<div class="chart" id="chart"></div>
+
+<div class="labels">
+<span>7h lalu</span>
+<span>Hari ini</span>
+</div>
+
+</section>
+
+
+<section class="glass panel">
+
+<div class="head">
+<h3>Transaksi terbaru</h3>
+<button class="link" onclick="showAll()">Semua</button>
+</div>
+
+<div id="transactions"></div>
+
+</section>
+
+
+<section class="glass panel">
+
+<div class="head">
+<h3>Riwayat bulanan</h3>
+<span class="muted">Tidak dihapus</span>
+</div>
+
+<div id="history" class="history"></div>
+
+</section>
+
+
+<!-- BACKUP RESTORE -->
+
+<section class="glass panel backup-card">
+
+<div class="head">
+<h3>Backup & Restore</h3>
+<span class="muted">Lokal</span>
+</div>
+
+<div class="backup-buttons">
+
+<button class="backup-btn backup" onclick="backupData()">
+⬇ Backup
+</button>
+
+<button class="backup-btn restore" onclick="document.getElementById('restoreFile').click()">
+↥ Restore
+</button>
+
+</div>
+
+<input
+id="restoreFile"
+type="file"
+accept=".dhbackup"
+style="display:none"
+onchange="restoreData(event)"
+>
+
+<div class="backup-note">
+Backup Dompet Harry menggunakan enkripsi AES-256-GCM.
+Password backup berbeda dari PIN aplikasi.
+</div>
+
+<div class="security-note">
+Simpan file backup dan password backup di tempat aman.
+Password backup tidak dapat dipulihkan jika Anda lupa.
+</div>
+
+</section>
+
 </main>
 
-<button class="fab" onclick="document.getElementById('add').scrollIntoView({behavior:'smooth'})">＋</button>
-<nav class="nav"><button class="active" onclick="scrollTop()">⌂<br>Beranda</button><button onclick="document.getElementById('transactions').scrollIntoView({behavior:'smooth'})">☷<br>Transaksi</button><button onclick="document.getElementById('history').scrollIntoView({behavior:'smooth'})">▣<br>Riwayat</button><button onclick="exportData()">↥<br>Backup</button></nav>
+
+<button
+class="fab"
+onclick="document.getElementById('add').scrollIntoView({behavior:'smooth'})">
+＋
+</button>
+
+
+<nav class="nav">
+
+<button class="active" onclick="scrollTop()">
+⌂<br>Beranda
+</button>
+
+<button onclick="document.getElementById('transactions').scrollIntoView({behavior:'smooth'})">
+☷<br>Transaksi
+</button>
+
+<button onclick="document.getElementById('history').scrollIntoView({behavior:'smooth'})">
+▣<br>Riwayat
+</button>
+
+<button onclick="document.querySelector('.backup-card').scrollIntoView({behavior:'smooth'})">
+↥<br>Backup
+</button>
+
+</nav>
+
+
 <div id="toast" class="toast"></div>
 
-<div class="pin-overlay hidden" id="pinOverlay"><div class="pin-card"><h2 id="pinTitle">Masukkan PIN</h2><p id="pinText">Dompet Harry dikunci. Masukkan PIN 6 digit untuk melanjutkan.</p><input id="pinInput" class="pin-input" type="password" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="••••••"><button class="pin-btn" id="pinAction">Buka Dompet</button><button class="pin-secondary" id="pinChange">Buat / ganti PIN</button></div></div><script>
-const KEY='dompet_harry_v1';let data=JSON.parse(localStorage.getItem(KEY)||'[]');
-const pad=n=>String(n).padStart(2,'0');const today=()=>{let d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
-const monthKey=d=>d.slice(0,7);const money=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
-const monthName=k=>{let [y,m]=k.split('-');return new Date(+y,+m-1,1).toLocaleDateString('id-ID',{month:'long',year:'numeric'})};
-const save=()=>localStorage.setItem(KEY,JSON.stringify(data));
-function months(){let s=new Set(data.map(x=>monthKey(x.date)));s.add(monthKey(today()));return [...s].sort().reverse()}
-function setup(){let s=document.getElementById('month'),old=s.value;s.innerHTML=months().map(x=>`<option value="${x}">${monthName(x)}</option>`).join('');if(old)s.value=old;document.getElementById('date').value=today()}
-function render(){
- setup();let mk=document.getElementById('month').value||monthKey(today()),r=data.filter(x=>monthKey(x.date)===mk);
- let d=r.filter(x=>x.type==='debit').reduce((a,x)=>a+x.amount,0),c=r.filter(x=>x.type==='credit').reduce((a,x)=>a+x.amount,0);
- document.getElementById('expense').textContent=money(d);document.getElementById('income').textContent=money(c);document.getElementById('balance').textContent=money(c-d);
- let recent=[...r].sort((a,b)=>b.date.localeCompare(a.date)||b.created-a.created).slice(0,8);document.getElementById('transactions').innerHTML=recent.length?recent.map(tx).join(''):'<div class="empty">Belum ada transaksi bulan ini.</div>';
- let hist=months().map(m=>{let a=data.filter(x=>monthKey(x.date)===m),d=a.filter(x=>x.type==='debit').reduce((s,x)=>s+x.amount,0),c=a.filter(x=>x.type==='credit').reduce((s,x)=>s+x.amount,0);return `<div class="monthcard"><div><b>${monthName(m)}</b><br><span>${a.length} transaksi</span></div><div style="text-align:right"><span>Debit</span><br><b class="red">${money(d)}</b></div><div style="text-align:right"><span>Net</span><br><b>${money(c-d)}</b></div></div>`}).join('');
- document.getElementById('history').innerHTML=hist;drawChart();
-}
-function tx(x){return `<div class="tx"><div class="cat">${x.cat.split(' ')[0]}</div><div class="txmain"><b>${esc(x.desc)}</b><span>${x.cat} • ${new Date(x.date+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short'})}</span></div><div class="money ${x.type==='debit'?'red':'green'}">${x.type==='debit'?'-':'+'}${money(x.amount)}</div><button class="del" onclick="delTx('${x.id}')">✕</button></div>`}
-function addTx(e){e.preventDefault();let a=+amount.value;data.push({id:crypto.randomUUID?crypto.randomUUID():Date.now()+Math.random(),date:date.value,desc:desc.value.trim(),type:type.value,cat:cat.value,amount:a,created:Date.now()});save();toast('Transaksi disimpan');resetForm();render()}
-function resetForm(){document.getElementById('desc').value='';document.getElementById('amount').value='';document.getElementById('date').value=today()}
-function setType(t){type.value=t;document.getElementById('add').scrollIntoView({behavior:'smooth'})}
-function delTx(id){let x=data.find(a=>String(a.id)===String(id));if(x&&confirm(`Hapus ${x.desc} sebesar ${money(x.amount)}?`)){data=data.filter(a=>String(a.id)!==String(id));save();toast('Transaksi dihapus');render()}}
-function drawChart(){let days=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let k=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`,v=data.filter(x=>x.date===k&&x.type==='debit').reduce((s,x)=>s+x.amount,0);days.push(v)}let max=Math.max(...days,1);document.getElementById('weekTotal').textContent=money(days.reduce((a,b)=>a+b,0));document.getElementById('chart').innerHTML=days.map(v=>`<div class="bar" style="height:${Math.max(7,v/max*100)}%"></div>`).join('')}
-function showAll(){let r=[...data].sort((a,b)=>b.date.localeCompare(a.date)||b.created-a.created);document.getElementById('transactions').innerHTML=r.length?r.map(tx).join(''):'<div class="empty">Belum ada transaksi.</div>';document.getElementById('transactions').scrollIntoView({behavior:'smooth'})}
-function exportData(){let b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='finglass-backup.json';a.click();URL.revokeObjectURL(a.href);toast('Backup dibuat')}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
-function toast(s){let t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
-window.scrollTop=()=>window.scrollTo({top:0,behavior:'smooth'});render();
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
-// PIN 6 digit lokal: hanya hash SHA-256 yang disimpan, bukan PIN asli.
+<!-- PIN -->
+
+<div class="pin-overlay hidden" id="pinOverlay">
+
+<div class="pin-card">
+
+<h2 id="pinTitle">Masukkan PIN</h2>
+
+<p id="pinText">
+Dompet Harry dikunci. Masukkan PIN 6 digit untuk melanjutkan.
+</p>
+
+<input
+id="pinInput"
+class="pin-input"
+type="password"
+inputmode="numeric"
+maxlength="6"
+autocomplete="off"
+placeholder="••••••"
+>
+
+<button class="pin-btn" id="pinAction">
+Buka Dompet
+</button>
+
+<button class="pin-secondary" id="pinChange">
+Buat / ganti PIN
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   DOMPET HARRY
+   DATA STORAGE
+   ========================================================= */
+
+const KEY='dompet_harry_v1';
+
+let data=[];
+
+try{
+data=JSON.parse(localStorage.getItem(KEY)||'[]');
+if(!Array.isArray(data)) data=[];
+}catch(e){
+data=[];
+}
+
+
+const pad=n=>String(n).padStart(2,'0');
+
+const today=()=>{
+let d=new Date();
+return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+};
+
+const monthKey=d=>d.slice(0,7);
+
+const money=n=>new Intl.NumberFormat(
+'id-ID',
+{
+style:'currency',
+currency:'IDR',
+maximumFractionDigits:0
+}
+).format(Number(n)||0);
+
+const monthName=k=>{
+let [y,m]=k.split('-');
+return new Date(+y,+m-1,1)
+.toLocaleDateString(
+'id-ID',
+{
+month:'long',
+year:'numeric'
+}
+);
+};
+
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+function save(){
+localStorage.setItem(KEY,JSON.stringify(data));
+}
+
+function months(){
+
+let s=new Set(
+data.map(x=>monthKey(x.date))
+);
+
+s.add(monthKey(today()));
+
+return [...s].sort().reverse();
+}
+
+function setup(){
+
+let s=document.getElementById('month');
+let old=s.value;
+
+s.innerHTML=months()
+.map(x=>`<option value="${x}">${monthName(x)}</option>`)
+.join('');
+
+if(old && months().includes(old)){
+s.value=old;
+}
+
+document.getElementById('date').value=today();
+
+}
+
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+function render(){
+
+setup();
+
+let mk=document.getElementById('month').value||monthKey(today());
+
+let r=data.filter(
+x=>monthKey(x.date)===mk
+);
+
+let d=r
+.filter(x=>x.type==='debit')
+.reduce((a,x)=>a+(Number(x.amount)||0),0);
+
+let c=r
+.filter(x=>x.type==='credit')
+.reduce((a,x)=>a+(Number(x.amount)||0),0);
+
+document.getElementById('expense').textContent=money(d);
+document.getElementById('income').textContent=money(c);
+document.getElementById('balance').textContent=money(c-d);
+
+
+let recent=[...r]
+.sort((a,b)=>
+b.date.localeCompare(a.date)||
+(b.created||0)-(a.created||0)
+)
+.slice(0,8);
+
+document.getElementById('transactions').innerHTML=
+recent.length
+?recent.map(tx).join('')
+:'<div class="empty">Belum ada transaksi bulan ini.</div>';
+
+
+let hist=months().map(m=>{
+
+let a=data.filter(
+x=>monthKey(x.date)===m
+);
+
+let debit=a
+.filter(x=>x.type==='debit')
+.reduce((s,x)=>s+(Number(x.amount)||0),0);
+
+let credit=a
+.filter(x=>x.type==='credit')
+.reduce((s,x)=>s+(Number(x.amount)||0),0);
+
+return `
+<div class="monthcard">
+
+<div>
+<b>${monthName(m)}</b><br>
+<span>${a.length} transaksi</span>
+</div>
+
+<div style="text-align:right">
+<span>Debit</span><br>
+<b class="red">${money(debit)}</b>
+</div>
+
+<div style="text-align:right">
+<span>Net</span><br>
+<b>${money(credit-debit)}</b>
+</div>
+
+</div>
+`;
+
+}).join('');
+
+document.getElementById('history').innerHTML=hist;
+
+drawChart();
+
+}
+
+
+/* =========================================================
+   TRANSACTION
+   ========================================================= */
+
+function tx(x){
+
+return `
+<div class="tx">
+
+<div class="cat">
+${String(x.cat||'📦').split(' ')[0]}
+</div>
+
+<div class="txmain">
+
+<b>${esc(x.desc)}</b>
+
+<span>
+${esc(x.cat)}
+•
+${new Date(x.date+'T00:00:00')
+.toLocaleDateString(
+'id-ID',
+{
+day:'2-digit',
+month:'short',
+year:'numeric'
+}
+)}
+</span>
+
+</div>
+
+<div class="money ${x.type==='debit'?'red':'green'}">
+${x.type==='debit'?'-':'+'}${money(x.amount)}
+</div>
+
+<button
+class="del"
+onclick="delTx('${String(x.id).replace(/'/g,"\\'")}')">
+✕
+</button>
+
+</div>
+`;
+
+}
+
+
+function addTx(e){
+
+e.preventDefault();
+
+let a=Number(document.getElementById('amount').value);
+
+if(!Number.isFinite(a)||a<=0){
+toast('Nominal tidak valid');
+return;
+}
+
+data.push({
+
+id:
+crypto.randomUUID
+?crypto.randomUUID()
+:String(Date.now())+'-'+Math.random(),
+
+date:document.getElementById('date').value,
+
+desc:
+document.getElementById('desc')
+.value
+.trim(),
+
+type:
+document.getElementById('type').value,
+
+cat:
+document.getElementById('cat').value,
+
+amount:a,
+
+created:Date.now()
+
+});
+
+save();
+
+toast('Transaksi disimpan');
+
+resetForm();
+
+render();
+
+}
+
+
+function resetForm(){
+
+document.getElementById('desc').value='';
+document.getElementById('amount').value='';
+document.getElementById('date').value=today();
+
+}
+
+
+function setType(t){
+
+document.getElementById('type').value=t;
+
+document.getElementById('add')
+.scrollIntoView({behavior:'smooth'});
+
+}
+
+
+function delTx(id){
+
+let x=data.find(
+a=>String(a.id)===String(id)
+);
+
+if(
+x &&
+confirm(
+`Hapus ${x.desc} sebesar ${money(x.amount)}?`
+)
+){
+
+data=data.filter(
+a=>String(a.id)!==String(id)
+);
+
+save();
+
+toast('Transaksi dihapus');
+
+render();
+
+}
+
+}
+
+
+/* =========================================================
+   CHART
+   ========================================================= */
+
+function drawChart(){
+
+let days=[];
+
+for(let i=6;i>=0;i--){
+
+let d=new Date();
+
+d.setDate(d.getDate()-i);
+
+let k=
+`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+
+let v=data
+.filter(x=>x.date===k&&x.type==='debit')
+.reduce((s,x)=>s+(Number(x.amount)||0),0);
+
+days.push(v);
+
+}
+
+let max=Math.max(...days,1);
+
+document.getElementById('weekTotal')
+.textContent=money(
+days.reduce((a,b)=>a+b,0)
+);
+
+document.getElementById('chart').innerHTML=
+days
+.map(v=>`
+<div
+class="bar"
+style="height:${Math.max(7,v/max*100)}%"
+></div>
+`)
+.join('');
+
+}
+
+
+/* =========================================================
+   ALL TRANSACTIONS
+   ========================================================= */
+
+function showAll(){
+
+let r=[...data]
+.sort((a,b)=>
+b.date.localeCompare(a.date)||
+(b.created||0)-(a.created||0)
+);
+
+document.getElementById('transactions').innerHTML=
+r.length
+?r.map(tx).join('')
+:'<div class="empty">Belum ada transaksi.</div>';
+
+document.getElementById('transactions')
+.scrollIntoView({behavior:'smooth'});
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function esc(s){
+
+return String(s)
+.replace(
+/[&<>"']/g,
+c=>({
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#039;'
+}[c])
+);
+
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+function toast(s){
+
+let t=document.getElementById('toast');
+
+t.textContent=s;
+
+t.classList.add('show');
+
+setTimeout(
+()=>t.classList.remove('show'),
+2200
+);
+
+}
+
+
+window.scrollTop=()=>window.scrollTo({
+top:0,
+behavior:'smooth'
+});
+
+
+/* =========================================================
+   ENCRYPTED BACKUP
+   AES-256-GCM
+   PBKDF2-SHA256
+   ========================================================= */
+
+const BACKUP_FORMAT='dompet-harry-backup';
+const BACKUP_VERSION=1;
+const PBKDF2_ITERATIONS=250000;
+
+const encoder=new TextEncoder();
+const decoder=new TextDecoder();
+
+
+function bytesToBase64(bytes){
+
+let binary='';
+
+const chunk=0x8000;
+
+for(let i=0;i<bytes.length;i+=chunk){
+
+binary+=String.fromCharCode(
+...bytes.subarray(i,i+chunk)
+);
+
+}
+
+return btoa(binary);
+
+}
+
+
+function base64ToBytes(base64){
+
+const binary=atob(base64);
+
+const bytes=new Uint8Array(binary.length);
+
+for(let i=0;i<binary.length;i++){
+
+bytes[i]=binary.charCodeAt(i);
+
+}
+
+return bytes;
+
+}
+
+
+async function deriveBackupKey(password,salt){
+
+const baseKey=
+await crypto.subtle.importKey(
+'raw',
+encoder.encode(password),
+'PBKDF2',
+false,
+['deriveKey']
+);
+
+return crypto.subtle.deriveKey(
+
+{
+name:'PBKDF2',
+salt:salt,
+iterations:PBKDF2_ITERATIONS,
+hash:'SHA-256'
+},
+
+baseKey,
+
+{
+name:'AES-GCM',
+length:256
+},
+
+false,
+
+['encrypt','decrypt']
+
+);
+
+}
+
+
+function askBackupPassword(){
+
+let p=prompt(
+'Buat password untuk file backup.\n\n' +
+'Gunakan password yang kuat, minimal 10 karakter.\n' +
+'Password ini berbeda dari PIN aplikasi.'
+);
+
+if(p===null) return null;
+
+if(p.length<10){
+
+alert(
+'Password backup minimal 10 karakter.'
+);
+
+return null;
+
+}
+
+let q=prompt(
+'Ulangi password backup.'
+);
+
+if(q!==p){
+
+alert(
+'Password backup tidak cocok.'
+);
+
+return null;
+
+}
+
+return p;
+
+}
+
+
+async function backupData(){
+
+try{
+
+if(!window.crypto || !crypto.subtle){
+
+alert(
+'Browser ini tidak mendukung enkripsi backup.'
+);
+
+return;
+
+}
+
+if(!data.length){
+
+if(
+!confirm(
+'Belum ada transaksi. Tetap membuat backup kosong?'
+)
+)return;
+
+}
+
+const password=askBackupPassword();
+
+if(password===null)return;
+
+
+const payload={
+
+app:'Dompet Harry',
+
+format:BACKUP_FORMAT,
+
+version:BACKUP_VERSION,
+
+createdAt:new Date().toISOString(),
+
+transactionCount:data.length,
+
+transactions:data
+
+};
+
+
+const plainText=JSON.stringify(payload);
+
+const salt=
+crypto.getRandomValues(
+new Uint8Array(16)
+);
+
+const iv=
+crypto.getRandomValues(
+new Uint8Array(12)
+);
+
+
+const key=
+await deriveBackupKey(
+password,
+salt
+);
+
+
+const encrypted=
+await crypto.subtle.encrypt(
+
+{
+name:'AES-GCM',
+iv:iv
+},
+
+key,
+
+encoder.encode(plainText)
+
+);
+
+
+const backup={
+
+format:BACKUP_FORMAT,
+
+version:BACKUP_VERSION,
+
+algorithm:'AES-256-GCM',
+
+kdf:'PBKDF2-SHA256',
+
+iterations:PBKDF2_ITERATIONS,
+
+salt:bytesToBase64(salt),
+
+iv:bytesToBase64(iv),
+
+data:bytesToBase64(
+new Uint8Array(encrypted)
+)
+
+};
+
+
+const text=JSON.stringify(
+backup,
+null,
+2
+);
+
+const blob=
+new Blob(
+[text],
+{
+type:'application/octet-stream'
+}
+);
+
+const url=
+URL.createObjectURL(blob);
+
+const a=
+document.createElement('a');
+
+const d=
+new Date();
+
+const filename=
+`Dompet-Harry-Backup-${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}.dhbackup`;
+
+a.href=url;
+a.download=filename;
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+setTimeout(
+()=>URL.revokeObjectURL(url),
+1000
+);
+
+toast('Backup terenkripsi berhasil dibuat');
+
+}catch(error){
+
+console.error(error);
+
+alert(
+'Backup gagal dibuat. Silakan coba lagi.'
+);
+
+}
+
+}
+
+
+/* =========================================================
+   RESTORE
+   ========================================================= */
+
+async function restoreData(event){
+
+const file=
+event.target.files &&
+event.target.files[0];
+
+event.target.value='';
+
+if(!file)return;
+
+
+try{
+
+if(file.size>25*1024*1024){
+
+alert(
+'File backup terlalu besar.'
+);
+
+return;
+
+}
+
+
+const text=
+await file.text();
+
+const backup=
+JSON.parse(text);
+
+
+if(
+backup.format!==BACKUP_FORMAT ||
+backup.version!==BACKUP_VERSION
+){
+
+alert(
+'File bukan backup Dompet Harry yang kompatibel.'
+);
+
+return;
+
+}
+
+
+if(
+!backup.salt ||
+!backup.iv ||
+!backup.data
+){
+
+alert(
+'Struktur file backup tidak valid.'
+);
+
+return;
+
+}
+
+
+const password=
+prompt(
+'Masukkan password backup Dompet Harry.'
+);
+
+if(password===null)return;
+
+if(!password){
+
+alert(
+'Password tidak boleh kosong.'
+);
+
+return;
+
+}
+
+
+const salt=
+base64ToBytes(backup.salt);
+
+const iv=
+base64ToBytes(backup.iv);
+
+const encrypted=
+base64ToBytes(backup.data);
+
+
+const key=
+await deriveBackupKey(
+password,
+salt
+);
+
+
+let decrypted;
+
+try{
+
+decrypted=
+await crypto.subtle.decrypt(
+
+{
+name:'AES-GCM',
+iv:iv
+},
+
+key,
+
+encrypted
+
+);
+
+}catch(e){
+
+alert(
+'Password salah atau file backup rusak.'
+);
+
+return;
+
+}
+
+
+const restored=
+JSON.parse(
+decoder.decode(decrypted)
+);
+
+
+if(
+restored.app!=='Dompet Harry' ||
+restored.format!==BACKUP_FORMAT ||
+!Array.isArray(restored.transactions)
+){
+
+alert(
+'Isi backup tidak valid.'
+);
+
+return;
+
+}
+
+
+const count=
+restored.transactions.length;
+
+
+const ok=
+confirm(
+`Backup berisi ${count} transaksi.\n\n` +
+`Restore akan mengganti data transaksi lokal Dompet Harry saat ini.\n\n` +
+`Lanjutkan?`
+);
+
+
+if(!ok)return;
+
+
+/*
+   Validasi transaksi terlebih dahulu.
+   Tidak langsung memasukkan data yang rusak.
+*/
+
+const clean=[];
+
+for(const item of restored.transactions){
+
+if(
+!item ||
+typeof item!=='object' ||
+!item.date ||
+!item.desc ||
+!item.type ||
+!Number.isFinite(Number(item.amount))
+){
+
+continue;
+
+}
+
+if(
+item.type!=='debit' &&
+item.type!=='credit'
+){
+
+continue;
+
+}
+
+clean.push({
+
+id:
+item.id ||
+(
+String(Date.now())+
+'-'+
+Math.random()
+),
+
+date:String(item.date),
+
+desc:String(item.desc),
+
+type:item.type,
+
+cat:String(item.cat||'📦 Lainnya'),
+
+amount:Number(item.amount),
+
+created:Number(item.created)||Date.now()
+
+});
+
+}
+
+
+data=clean;
+
+save();
+
+render();
+
+
+toast(
+`Restore berhasil: ${clean.length} transaksi`
+);
+
+
+setTimeout(()=>{
+
+alert(
+`Restore berhasil.\n\n` +
+`${clean.length} transaksi telah dimuat kembali ke Dompet Harry.`
+);
+
+},250);
+
+
+}catch(error){
+
+console.error(error);
+
+alert(
+'Restore gagal. File tidak valid atau rusak.'
+);
+
+}
+
+}
+
+
+/* =========================================================
+   PIN 6 DIGIT
+   ========================================================= */
+
 const DH_PIN_KEY='dompet_harry_pin_hash_v2';
-async function dhHash(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
-function dhPinValid(p){return /^\d{6}$/.test(p||'')}
-function dhShowPin(first=false){document.getElementById('pinTitle').textContent=first?'Buat PIN 6 Digit':'Masukkan PIN';document.getElementById('pinText').textContent=first?'Buat PIN 6 digit untuk mengunci Dompet Harry di perangkat ini.':'Dompet Harry dikunci. Masukkan PIN 6 digit untuk melanjutkan.';document.getElementById('pinAction').textContent=first?'Simpan PIN':'Buka Dompet';document.getElementById('pinChange').style.display=first?'none':'block';document.getElementById('pinOverlay').classList.remove('hidden');setTimeout(()=>document.getElementById('pinInput').focus(),100)}
-function dhHidePin(){document.getElementById('pinOverlay').classList.add('hidden');document.getElementById('pinInput').value=''}
-async function pinSetup(){const saved=localStorage.getItem(DH_PIN_KEY);if(saved){const old=prompt('Masukkan PIN lama 6 digit.');if(!dhPinValid(old)||await dhHash(old)!==saved){alert('PIN lama salah.');return}}const p=prompt('Buat PIN baru 6 digit.');if(!dhPinValid(p)){alert('PIN harus tepat 6 digit.');return}const q=prompt('Ulangi PIN baru 6 digit.');if(p!==q){alert('PIN tidak cocok.');return}localStorage.setItem(DH_PIN_KEY,await dhHash(p));alert('PIN 6 digit berhasil disimpan.');sessionStorage.setItem('dh_unlocked','1')}
-async function dhUnlock(){const p=document.getElementById('pinInput').value;if(!dhPinValid(p)){alert('Masukkan PIN tepat 6 digit.');return}const saved=localStorage.getItem(DH_PIN_KEY);if(saved&&await dhHash(p)===saved){dhHidePin();sessionStorage.setItem('dh_unlocked','1')}else{document.getElementById('pinInput').value='';alert('PIN salah.')}}
-document.getElementById('pinAction').addEventListener('click',async()=>{if(!localStorage.getItem(DH_PIN_KEY)){const p=document.getElementById('pinInput').value;if(!dhPinValid(p)){alert('PIN harus tepat 6 digit.');return}const q=prompt('Ulangi PIN baru 6 digit.');if(p!==q){alert('PIN tidak cocok.');return}localStorage.setItem(DH_PIN_KEY,await dhHash(p));sessionStorage.setItem('dh_unlocked','1');dhHidePin();return}await dhUnlock()});
-document.getElementById('pinInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('pinAction').click()});document.getElementById('pinChange').addEventListener('click',pinSetup);
-if(!localStorage.getItem(DH_PIN_KEY))dhShowPin(true);else if(sessionStorage.getItem('dh_unlocked')!=='1')dhShowPin(false);
+
+
+async function dhHash(s){
+
+const b=
+await crypto.subtle.digest(
+'SHA-256',
+new TextEncoder().encode(s)
+);
+
+return Array
+.from(new Uint8Array(b))
+.map(
+x=>x.toString(16).padStart(2,'0')
+)
+.join('');
+
+}
+
+
+function dhPinValid(p){
+
+return /^\d{6}$/.test(p||'');
+
+}
+
+
+function dhShowPin(first=false){
+
+document.getElementById('pinTitle')
+.textContent=
+first
+?'Buat PIN 6 Digit'
+:'Masukkan PIN';
+
+document.getElementById('pinText')
+.textContent=
+first
+?'Buat PIN 6 digit untuk mengunci Dompet Harry di perangkat ini.'
+:'Dompet Harry dikunci. Masukkan PIN 6 digit untuk melanjutkan.';
+
+document.getElementById('pinAction')
+.textContent=
+first
+?'Simpan PIN'
+:'Buka Dompet';
+
+document.getElementById('pinChange')
+.style.display=
+first
+?'none'
+:'block';
+
+document.getElementById('pinOverlay')
+.classList.remove('hidden');
+
+setTimeout(
+()=>document.getElementById('pinInput').focus(),
+100
+);
+
+}
+
+
+function dhHidePin(){
+
+document.getElementById('pinOverlay')
+.classList.add('hidden');
+
+document.getElementById('pinInput').value='';
+
+}
+
+
+async function pinSetup(){
+
+const saved=
+localStorage.getItem(DH_PIN_KEY);
+
+if(saved){
+
+const old=
+prompt(
+'Masukkan PIN lama 6 digit.'
+);
+
+if(
+!dhPinValid(old) ||
+await dhHash(old)!==saved
+){
+
+alert('PIN lama salah.');
+
+return;
+
+}
+
+}
+
+const p=
+prompt(
+'Buat PIN baru 6 digit.'
+);
+
+if(!dhPinValid(p)){
+
+alert(
+'PIN harus tepat 6 digit.'
+);
+
+return;
+
+}
+
+const q=
+prompt(
+'Ulangi PIN baru 6 digit.'
+);
+
+if(p!==q){
+
+alert(
+'PIN tidak cocok.'
+);
+
+return;
+
+}
+
+localStorage.setItem(
+DH_PIN_KEY,
+await dhHash(p)
+);
+
+alert(
+'PIN 6 digit berhasil disimpan.'
+);
+
+sessionStorage.setItem(
+'dh_unlocked',
+'1'
+);
+
+}
+
+
+async function dhUnlock(){
+
+const p=
+document.getElementById('pinInput').value;
+
+if(!dhPinValid(p)){
+
+alert(
+'Masukkan PIN tepat 6 digit.'
+);
+
+return;
+
+}
+
+const saved=
+localStorage.getItem(DH_PIN_KEY);
+
+if(
+saved &&
+await dhHash(p)===saved
+){
+
+dhHidePin();
+
+sessionStorage.setItem(
+'dh_unlocked',
+'1'
+);
+
+}else{
+
+document.getElementById('pinInput').value='';
+
+alert('PIN salah.');
+
+}
+
+}
+
+
+document
+.getElementById('pinAction')
+.addEventListener(
+'click',
+async()=>{
+
+if(
+!localStorage.getItem(DH_PIN_KEY)
+){
+
+const p=
+document.getElementById('pinInput').value;
+
+if(!dhPinValid(p)){
+
+alert(
+'PIN harus tepat 6 digit.'
+);
+
+return;
+
+}
+
+const q=
+prompt(
+'Ulangi PIN baru 6 digit.'
+);
+
+if(p!==q){
+
+alert(
+'PIN tidak cocok.'
+);
+
+return;
+
+}
+
+localStorage.setItem(
+DH_PIN_KEY,
+await dhHash(p)
+);
+
+sessionStorage.setItem(
+'dh_unlocked',
+'1'
+);
+
+dhHidePin();
+
+return;
+
+}
+
+await dhUnlock();
+
+}
+);
+
+
+document
+.getElementById('pinInput')
+.addEventListener(
+'keydown',
+e=>{
+
+if(e.key==='Enter')
+document.getElementById('pinAction').click();
+
+}
+);
+
+
+document
+.getElementById('pinChange')
+.addEventListener(
+'click',
+pinSetup
+);
+
+
+/* =========================================================
+   SERVICE WORKER
+   ========================================================= */
+
+if('serviceWorker' in navigator){
+
+navigator.serviceWorker
+.register('./sw.js')
+.catch(()=>{});
+
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+render();
+
+
+if(
+!localStorage.getItem(DH_PIN_KEY)
+){
+
+dhShowPin(true);
+
+}else if(
+sessionStorage.getItem('dh_unlocked')!=='1'
+){
+
+dhShowPin(false);
+
+}
+
 </script>
+
 </body>
-</html>
+ </html>
