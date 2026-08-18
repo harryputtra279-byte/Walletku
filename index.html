@@ -508,7 +508,6 @@ font-size:12px;
 padding:8px
 }
 
-/* Backup / Restore */
 .backup-card{
 margin-top:13px
 }
@@ -588,7 +587,6 @@ title="Backup terenkripsi">↥</button>
 
 </header>
 
-
 <section class="glass hero">
 
 <div class="heroTop">
@@ -620,7 +618,6 @@ title="Backup terenkripsi">↥</button>
 
 </section>
 
-
 <section class="quick">
 
 <button class="glass q debit" onclick="setType('debit')">
@@ -636,7 +633,6 @@ title="Backup terenkripsi">↥</button>
 </button>
 
 </section>
-
 
 <section class="glass panel" id="add">
 
@@ -704,7 +700,6 @@ title="Backup terenkripsi">↥</button>
 
 </section>
 
-
 <section class="glass panel">
 
 <div class="head">
@@ -721,7 +716,6 @@ title="Backup terenkripsi">↥</button>
 
 </section>
 
-
 <section class="glass panel">
 
 <div class="head">
@@ -733,7 +727,6 @@ title="Backup terenkripsi">↥</button>
 
 </section>
 
-
 <section class="glass panel">
 
 <div class="head">
@@ -744,9 +737,6 @@ title="Backup terenkripsi">↥</button>
 <div id="history" class="history"></div>
 
 </section>
-
-
-<!-- BACKUP RESTORE -->
 
 <section class="glass panel backup-card">
 
@@ -777,25 +767,22 @@ onchange="restoreData(event)"
 
 <div class="backup-note">
 Backup Dompet Harry menggunakan enkripsi AES-256-GCM.
-Password backup berbeda dari PIN aplikasi.
+Password backup dibuat satu kali dan digunakan kembali untuk backup berikutnya.
 </div>
 
 <div class="security-note">
-Simpan file backup dan password backup di tempat aman.
-Password backup tidak dapat dipulihkan jika Anda lupa.
+Password backup tidak disimpan dalam bentuk asli. Simpan password backup di tempat aman. Jika lupa, backup terenkripsi tidak dapat dipulihkan.
 </div>
 
 </section>
 
 </main>
 
-
 <button
 class="fab"
 onclick="document.getElementById('add').scrollIntoView({behavior:'smooth'})">
 ＋
 </button>
-
 
 <nav class="nav">
 
@@ -817,11 +804,7 @@ onclick="document.getElementById('add').scrollIntoView({behavior:'smooth'})">
 
 </nav>
 
-
 <div id="toast" class="toast"></div>
-
-
-<!-- PIN -->
 
 <div class="pin-overlay hidden" id="pinOverlay">
 
@@ -855,13 +838,7 @@ Buat / ganti PIN
 
 </div>
 
-
 <script>
-
-/* =========================================================
-   DOMPET HARRY
-   DATA STORAGE
-   ========================================================= */
 
 const KEY='dompet_harry_v1';
 
@@ -873,7 +850,6 @@ if(!Array.isArray(data)) data=[];
 }catch(e){
 data=[];
 }
-
 
 const pad=n=>String(n).padStart(2,'0');
 
@@ -904,11 +880,6 @@ year:'numeric'
 }
 );
 };
-
-
-/* =========================================================
-   DATA
-   ========================================================= */
 
 function save(){
 localStorage.setItem(KEY,JSON.stringify(data));
@@ -942,11 +913,6 @@ document.getElementById('date').value=today();
 
 }
 
-
-/* =========================================================
-   RENDER
-   ========================================================= */
-
 function render(){
 
 setup();
@@ -969,7 +935,6 @@ document.getElementById('expense').textContent=money(d);
 document.getElementById('income').textContent=money(c);
 document.getElementById('balance').textContent=money(c-d);
 
-
 let recent=[...r]
 .sort((a,b)=>
 b.date.localeCompare(a.date)||
@@ -981,7 +946,6 @@ document.getElementById('transactions').innerHTML=
 recent.length
 ?recent.map(tx).join('')
 :'<div class="empty">Belum ada transaksi bulan ini.</div>';
-
 
 let hist=months().map(m=>{
 
@@ -1026,11 +990,6 @@ drawChart();
 
 }
 
-
-/* =========================================================
-   TRANSACTION
-   ========================================================= */
-
 function tx(x){
 
 return `
@@ -1074,7 +1033,6 @@ onclick="delTx('${String(x.id).replace(/'/g,"\\'")}')">
 `;
 
 }
-
 
 function addTx(e){
 
@@ -1123,7 +1081,6 @@ render();
 
 }
 
-
 function resetForm(){
 
 document.getElementById('desc').value='';
@@ -1131,7 +1088,6 @@ document.getElementById('amount').value='';
 document.getElementById('date').value=today();
 
 }
-
 
 function setType(t){
 
@@ -1141,7 +1097,6 @@ document.getElementById('add')
 .scrollIntoView({behavior:'smooth'});
 
 }
-
 
 function delTx(id){
 
@@ -1169,11 +1124,6 @@ render();
 }
 
 }
-
-
-/* =========================================================
-   CHART
-   ========================================================= */
 
 function drawChart(){
 
@@ -1215,11 +1165,6 @@ style="height:${Math.max(7,v/max*100)}%"
 
 }
 
-
-/* =========================================================
-   ALL TRANSACTIONS
-   ========================================================= */
-
 function showAll(){
 
 let r=[...data]
@@ -1238,11 +1183,6 @@ document.getElementById('transactions')
 
 }
 
-
-/* =========================================================
-   ESCAPE HTML
-   ========================================================= */
-
 function esc(s){
 
 return String(s)
@@ -1259,11 +1199,6 @@ c=>({
 
 }
 
-
-/* =========================================================
-   TOAST
-   ========================================================= */
-
 function toast(s){
 
 let t=document.getElementById('toast');
@@ -1279,7 +1214,6 @@ setTimeout(
 
 }
 
-
 window.scrollTop=()=>window.scrollTo({
 top:0,
 behavior:'smooth'
@@ -1287,23 +1221,22 @@ behavior:'smooth'
 
 
 /* =========================================================
-   ENCRYPTED BACKUP
-   AES-256-GCM
-   PBKDF2-SHA256
+   BACKUP SECURITY
    ========================================================= */
 
 const BACKUP_FORMAT='dompet-harry-backup';
-const BACKUP_VERSION=1;
+const BACKUP_VERSION=2;
+
 const PBKDF2_ITERATIONS=250000;
+
+const BACKUP_PASSWORD_KEY='dompet_harry_backup_verifier_v1';
 
 const encoder=new TextEncoder();
 const decoder=new TextDecoder();
 
-
 function bytesToBase64(bytes){
 
 let binary='';
-
 const chunk=0x8000;
 
 for(let i=0;i<bytes.length;i+=chunk){
@@ -1318,7 +1251,6 @@ return btoa(binary);
 
 }
 
-
 function base64ToBytes(base64){
 
 const binary=atob(base64);
@@ -1326,15 +1258,20 @@ const binary=atob(base64);
 const bytes=new Uint8Array(binary.length);
 
 for(let i=0;i<binary.length;i++){
-
 bytes[i]=binary.charCodeAt(i);
-
 }
 
 return bytes;
 
 }
 
+function randomBytes(length){
+
+return crypto.getRandomValues(
+new Uint8Array(length)
+);
+
+}
 
 async function deriveBackupKey(password,salt){
 
@@ -1372,15 +1309,110 @@ false,
 }
 
 
-function askBackupPassword(){
+/*
+   Password verifier.
+   Password asli TIDAK disimpan.
+   Verifier menggunakan PBKDF2 dengan salt
+   tersendiri dari salt file backup.
+*/
 
-let p=prompt(
-'Buat password untuk file backup.\n\n' +
-'Gunakan password yang kuat, minimal 10 karakter.\n' +
-'Password ini berbeda dari PIN aplikasi.'
+async function createPasswordVerifier(password){
+
+const salt=randomBytes(16);
+
+const baseKey=
+await crypto.subtle.importKey(
+'raw',
+encoder.encode(password),
+'PBKDF2',
+false,
+['deriveBits']
 );
 
-if(p===null) return null;
+const bits=
+await crypto.subtle.deriveBits(
+{
+name:'PBKDF2',
+salt:salt,
+iterations:PBKDF2_ITERATIONS,
+hash:'SHA-256'
+},
+baseKey,
+256
+);
+
+return {
+salt:bytesToBase64(salt),
+verifier:bytesToBase64(new Uint8Array(bits))
+};
+
+}
+
+async function verifyBackupPassword(password,record){
+
+try{
+
+const salt=
+base64ToBytes(record.salt);
+
+const expected=
+base64ToBytes(record.verifier);
+
+const baseKey=
+await crypto.subtle.importKey(
+'raw',
+encoder.encode(password),
+'PBKDF2',
+false,
+['deriveBits']
+);
+
+const bits=
+await crypto.subtle.deriveBits(
+{
+name:'PBKDF2',
+salt:salt,
+iterations:PBKDF2_ITERATIONS,
+hash:'SHA-256'
+},
+baseKey,
+256
+);
+
+const actual=
+new Uint8Array(bits);
+
+if(actual.length!==expected.length)return false;
+
+let result=0;
+
+for(let i=0;i<actual.length;i++){
+result|=actual[i]^expected[i];
+}
+
+return result===0;
+
+}catch(e){
+
+console.error(e);
+
+return false;
+
+}
+
+}
+
+
+async function setupBackupPassword(){
+
+const p=prompt(
+'Buat password backup Dompet Harry.\n\n' +
+'Password ini hanya dibuat SATU KALI.\n' +
+'Minimal 10 karakter.\n\n' +
+'Simpan password ini di tempat aman.'
+);
+
+if(p===null)return null;
 
 if(p.length<10){
 
@@ -1392,14 +1424,79 @@ return null;
 
 }
 
-let q=prompt(
-'Ulangi password backup.'
+const q=prompt(
+'Ulangi password backup untuk konfirmasi.'
 );
 
 if(q!==p){
 
 alert(
 'Password backup tidak cocok.'
+);
+
+return null;
+
+}
+
+const verifier=
+await createPasswordVerifier(p);
+
+localStorage.setItem(
+BACKUP_PASSWORD_KEY,
+JSON.stringify(verifier)
+);
+
+return p;
+
+}
+
+
+async function getBackupPassword(){
+
+const stored=
+localStorage.getItem(BACKUP_PASSWORD_KEY);
+
+if(!stored){
+
+return setupBackupPassword();
+
+}
+
+let record;
+
+try{
+
+record=JSON.parse(stored);
+
+}catch(e){
+
+localStorage.removeItem(BACKUP_PASSWORD_KEY);
+
+return setupBackupPassword();
+
+}
+
+const p=prompt(
+'Masukkan password backup Dompet Harry.'
+);
+
+if(p===null)return null;
+
+if(p.length<1){
+
+alert('Password tidak boleh kosong.');
+
+return null;
+
+}
+
+const valid=
+await verifyBackupPassword(p,record);
+
+if(!valid){
+
+alert(
+'Password backup salah.'
 );
 
 return null;
@@ -1435,7 +1532,8 @@ if(
 
 }
 
-const password=askBackupPassword();
+const password=
+await getBackupPassword();
 
 if(password===null)return;
 
@@ -1456,26 +1554,17 @@ transactions:data
 
 };
 
+const plainText=
+JSON.stringify(payload);
 
-const plainText=JSON.stringify(payload);
-
-const salt=
-crypto.getRandomValues(
-new Uint8Array(16)
-);
-
-const iv=
-crypto.getRandomValues(
-new Uint8Array(12)
-);
-
+const salt=randomBytes(16);
+const iv=randomBytes(12);
 
 const key=
 await deriveBackupKey(
 password,
 salt
 );
-
 
 const encrypted=
 await crypto.subtle.encrypt(
@@ -1490,7 +1579,6 @@ key,
 encoder.encode(plainText)
 
 );
-
 
 const backup={
 
@@ -1514,8 +1602,8 @@ new Uint8Array(encrypted)
 
 };
 
-
-const text=JSON.stringify(
+const text=
+JSON.stringify(
 backup,
 null,
 2
@@ -1535,8 +1623,7 @@ URL.createObjectURL(blob);
 const a=
 document.createElement('a');
 
-const d=
-new Date();
+const d=new Date();
 
 const filename=
 `Dompet-Harry-Backup-${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}.dhbackup`;
@@ -1555,7 +1642,9 @@ setTimeout(
 1000
 );
 
-toast('Backup terenkripsi berhasil dibuat');
+toast(
+'Backup terenkripsi berhasil dibuat'
+);
 
 }catch(error){
 
@@ -1570,10 +1659,6 @@ alert(
 }
 
 
-/* =========================================================
-   RESTORE
-   ========================================================= */
-
 async function restoreData(event){
 
 const file=
@@ -1583,7 +1668,6 @@ event.target.files[0];
 event.target.value='';
 
 if(!file)return;
-
 
 try{
 
@@ -1597,17 +1681,18 @@ return;
 
 }
 
-
 const text=
 await file.text();
 
 const backup=
 JSON.parse(text);
 
-
 if(
 backup.format!==BACKUP_FORMAT ||
+(
+backup.version!==1 &&
 backup.version!==BACKUP_VERSION
+)
 ){
 
 alert(
@@ -1617,7 +1702,6 @@ alert(
 return;
 
 }
-
 
 if(
 !backup.salt ||
@@ -1633,24 +1717,10 @@ return;
 
 }
 
-
 const password=
-prompt(
-'Masukkan password backup Dompet Harry.'
-);
+await getBackupPassword();
 
 if(password===null)return;
-
-if(!password){
-
-alert(
-'Password tidak boleh kosong.'
-);
-
-return;
-
-}
-
 
 const salt=
 base64ToBytes(backup.salt);
@@ -1661,13 +1731,11 @@ base64ToBytes(backup.iv);
 const encrypted=
 base64ToBytes(backup.data);
 
-
 const key=
 await deriveBackupKey(
 password,
 salt
 );
-
 
 let decrypted;
 
@@ -1697,12 +1765,10 @@ return;
 
 }
 
-
 const restored=
 JSON.parse(
 decoder.decode(decrypted)
 );
-
 
 if(
 restored.app!=='Dompet Harry' ||
@@ -1718,10 +1784,8 @@ return;
 
 }
 
-
 const count=
 restored.transactions.length;
-
 
 const ok=
 confirm(
@@ -1730,14 +1794,7 @@ confirm(
 `Lanjutkan?`
 );
 
-
 if(!ok)return;
-
-
-/*
-   Validasi transaksi terlebih dahulu.
-   Tidak langsung memasukkan data yang rusak.
-*/
 
 const clean=[];
 
@@ -1791,18 +1848,15 @@ created:Number(item.created)||Date.now()
 
 }
 
-
 data=clean;
 
 save();
 
 render();
 
-
 toast(
 `Restore berhasil: ${clean.length} transaksi`
 );
-
 
 setTimeout(()=>{
 
@@ -1812,7 +1866,6 @@ alert(
 );
 
 },250);
-
 
 }catch(error){
 
@@ -1833,7 +1886,6 @@ alert(
 
 const DH_PIN_KEY='dompet_harry_pin_hash_v2';
 
-
 async function dhHash(s){
 
 const b=
@@ -1851,13 +1903,11 @@ x=>x.toString(16).padStart(2,'0')
 
 }
 
-
 function dhPinValid(p){
 
 return /^\d{6}$/.test(p||'');
 
 }
-
 
 function dhShowPin(first=false){
 
@@ -1895,7 +1945,6 @@ setTimeout(
 
 }
 
-
 function dhHidePin(){
 
 document.getElementById('pinOverlay')
@@ -1904,7 +1953,6 @@ document.getElementById('pinOverlay')
 document.getElementById('pinInput').value='';
 
 }
-
 
 async function pinSetup(){
 
@@ -1977,7 +2025,6 @@ sessionStorage.setItem(
 
 }
 
-
 async function dhUnlock(){
 
 const p=
@@ -2017,7 +2064,6 @@ alert('PIN salah.');
 }
 
 }
-
 
 document
 .getElementById('pinAction')
@@ -2078,7 +2124,6 @@ await dhUnlock();
 }
 );
 
-
 document
 .getElementById('pinInput')
 .addEventListener(
@@ -2090,7 +2135,6 @@ document.getElementById('pinAction').click();
 
 }
 );
-
 
 document
 .getElementById('pinChange')
@@ -2119,7 +2163,6 @@ navigator.serviceWorker
 
 render();
 
-
 if(
 !localStorage.getItem(DH_PIN_KEY)
 ){
@@ -2137,4 +2180,4 @@ dhShowPin(false);
 </script>
 
 </body>
- </html>
+   </html>
