@@ -1,0 +1,10 @@
+{
+  "name": "Dompet Harry",
+  "short_name": "Dompet Harry",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#090b10",
+  "theme_color": "#00e676",
+  "description": "Catatan keuangan pribadi lokal"
+}
