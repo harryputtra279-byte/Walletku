@@ -364,6 +364,15 @@ color:var(--txt);
 font-weight:700
 }
 
+.chartLabel strong{
+display:block;
+margin-top:3px;
+font-size:8px;
+font-weight:800;
+color:var(--txt);
+white-space:nowrap
+}
+   
 .bar{
 flex:1;
 min-width:5px;
@@ -1237,6 +1246,8 @@ title="${x.day}, ${x.dateLabel} — ${money(x.amount)}"
 <b>${x.day.slice(0,3)}</b>
 
 ${x.dateLabel}
+
+<strong>${money(x.amount)}</strong>
 
 </div>
 
