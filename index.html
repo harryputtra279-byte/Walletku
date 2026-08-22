@@ -327,12 +327,18 @@ font-weight:800;
 box-shadow:0 10px 22px #00c8533b
 }
 
+/* =========================
+   GRAFIK 7 HARI
+   ========================= */
+
 .chart{
-height:175px;
+height:205px;
 display:flex;
 align-items:end;
 gap:7px;
-padding:10px 2px 2px
+padding:12px 2px 2px;
+position:relative;
+overflow:visible;
 }
 
 .chartItem{
@@ -342,7 +348,8 @@ display:flex;
 flex-direction:column;
 justify-content:flex-end;
 align-items:center;
-min-width:0
+min-width:0;
+position:relative;
 }
 
 .chartBarWrap{
@@ -350,7 +357,8 @@ height:145px;
 width:100%;
 display:flex;
 align-items:end;
-justify-content:center
+justify-content:center;
+position:relative;
 }
 
 .chartLabel{
@@ -359,31 +367,155 @@ text-align:center;
 font-size:9px;
 line-height:1.25;
 color:var(--muted);
-white-space:nowrap
+white-space:nowrap;
 }
 
 .chartLabel b{
 display:block;
 font-size:9px;
 color:var(--txt);
-font-weight:700
+font-weight:700;
 }
 
 .chartLabel strong{
-display:block;
-margin-top:3px;
-font-size:8px;
-font-weight:800;
-color:var(--txt);
-white-space:nowrap
+display:none;
 }
+
+/* BATANG GRAFIK */
 
 .bar{
 flex:1;
-min-width:5px;
-border-radius:8px 8px 4px 4px;
-background:linear-gradient(#00f58a,#00c853);
-opacity:.8
+min-width:7px;
+max-width:32px;
+border-radius:9px 9px 5px 5px;
+background:linear-gradient(
+180deg,
+#00f58a,
+#00c853
+);
+opacity:.82;
+cursor:pointer;
+transition:
+transform .18s ease,
+opacity .18s ease,
+box-shadow .18s ease;
+}
+
+/* Saat batang dipilih */
+
+.bar.selected{
+opacity:1;
+transform:scaleX(1.12);
+box-shadow:
+0 5px 14px rgba(0,200,83,.30);
+}
+
+/* =========================
+   BUBBLE DETAIL GRAFIK
+   ========================= */
+
+.chartBubble{
+position:absolute;
+z-index:20;
+left:50%;
+bottom:calc(100% + 10px);
+transform:
+translateX(-50%)
+translateY(5px)
+scale(.96);
+
+width:max-content;
+min-width:145px;
+max-width:190px;
+
+padding:11px 13px;
+
+border-radius:16px;
+
+background:
+linear-gradient(
+145deg,
+rgba(255,255,255,.94),
+rgba(240,255,247,.88)
+);
+
+border:1px solid rgba(255,255,255,.95);
+
+backdrop-filter:blur(18px) saturate(150%);
+-webkit-backdrop-filter:blur(18px) saturate(150%);
+
+box-shadow:
+0 12px 30px rgba(24,39,35,.18),
+0 2px 8px rgba(0,200,83,.10);
+
+opacity:0;
+pointer-events:none;
+
+transition:
+opacity .18s ease,
+transform .18s ease;
+}
+
+/* Bubble aktif */
+
+.chartBubble.show{
+opacity:1;
+transform:
+translateX(-50%)
+translateY(0)
+scale(1);
+}
+
+/* Segitiga kecil di bawah bubble */
+
+.chartBubble::after{
+content:"";
+position:absolute;
+left:50%;
+bottom:-6px;
+
+width:12px;
+height:12px;
+
+background:#f4fff8;
+
+border-right:1px solid rgba(255,255,255,.95);
+border-bottom:1px solid rgba(255,255,255,.95);
+
+transform:translateX(-50%) rotate(45deg);
+}
+
+/* Isi bubble */
+
+.bubbleDay{
+font-size:11px;
+font-weight:800;
+color:#151827;
+margin-bottom:2px;
+}
+
+.bubbleDate{
+font-size:10px;
+color:var(--muted);
+margin-bottom:8px;
+}
+
+.bubbleDivider{
+height:1px;
+background:rgba(0,0,0,.06);
+margin:6px 0 7px;
+}
+
+.bubbleTitle{
+font-size:9px;
+color:var(--muted);
+margin-bottom:2px;
+}
+
+.bubbleAmount{
+font-size:15px;
+font-weight:900;
+color:#009f4f;
 }
 
 .labels{
@@ -1380,6 +1512,11 @@ renderHistory();
    CHART 7 HARI
    ===================================================== */
 
+/* =====================================================
+   CHART 7 HARI
+   DENGAN BUBBLE DETAIL SAAT DISENTUH
+   ===================================================== */
+
 function drawChart(){
 
 let days=[];
@@ -1407,8 +1544,8 @@ d.getDate()-i
 let k=
 `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 
-let v=
-data.filter(
+let v=data
+.filter(
 x=>
 x.date===k &&
 x.type==='debit'
@@ -1433,11 +1570,20 @@ dateLabel:
 
 }
 
-let max=
-Math.max(
+
+/* =========================
+   NILAI MAKSIMUM GRAFIK
+   ========================= */
+
+let max=Math.max(
 ...days.map(x=>x.amount),
 1
 );
+
+
+/* =========================
+   TOTAL 7 HARI
+   ========================= */
 
 document.getElementById('weekTotal')
 .textContent=
@@ -1448,25 +1594,73 @@ days.reduce(
 )
 );
 
+
+/* =========================
+   RENDER GRAFIK
+   ========================= */
+
 document.getElementById('chart')
 .innerHTML=
 
-days.map(x=>`
+days.map((x,index)=>`
 
-<div class="chartItem">
+<div
+class="chartItem"
+data-index="${index}"
+>
 
 <div class="chartBarWrap">
 
 <div
 class="bar"
+data-index="${index}"
 style="height:${Math.max(
 7,
 x.amount/max*100
 )}%"
-title="${x.day}, ${x.dateLabel} — ${money(x.amount)}"
+title=""
 ></div>
 
+
+<!-- =========================
+     BUBBLE DETAIL
+     ========================= -->
+
+<div
+class="chartBubble"
+data-bubble="${index}"
+>
+
+<div class="bubbleDay">
+${x.day}
 </div>
+
+<div class="bubbleDate">
+${new Date(x.date+'T00:00:00')
+.toLocaleDateString(
+'id-ID',
+{
+day:'2-digit',
+month:'long',
+year:'numeric'
+}
+)}
+</div>
+
+<div class="bubbleDivider"></div>
+
+<div class="bubbleTitle">
+Pengeluaran
+</div>
+
+<div class="bubbleAmount">
+${money(x.amount)}
+</div>
+
+</div>
+
+</div>
+
 
 <div class="chartLabel">
 
@@ -1474,15 +1668,146 @@ title="${x.day}, ${x.dateLabel} — ${money(x.amount)}"
 
 ${x.dateLabel}
 
-<strong>${money(x.amount)}</strong>
-
 </div>
 
 </div>
 
 `).join('');
 
+
+/* =====================================================
+   EVENT KLIK / SENTUH BATANG
+   ===================================================== */
+
+const bars=
+document.querySelectorAll(
+'#chart .bar'
+);
+
+bars.forEach(bar=>{
+
+bar.addEventListener(
+'click',
+function(e){
+
+e.stopPropagation();
+
+const index=
+this.dataset.index;
+
+
+/* =========================
+   MATIKAN BUBBLE LAIN
+   ========================= */
+
+document
+.querySelectorAll(
+'#chart .chartBubble'
+)
+.forEach(b=>{
+
+if(
+b.dataset.bubble!==index
+){
+
+b.classList.remove('show');
+
 }
+
+});
+
+
+/* =========================
+   MATIKAN BATANG LAIN
+   ========================= */
+
+document
+.querySelectorAll(
+'#chart .bar'
+)
+.forEach(b=>{
+
+if(b!==this){
+
+b.classList.remove('selected');
+
+}
+
+});
+
+
+/* =========================
+   TOGGLE BUBBLE
+   ========================= */
+
+const bubble=
+document.querySelector(
+`#chart .chartBubble[data-bubble="${index}"]`
+);
+
+if(!bubble)return;
+
+const isOpen=
+bubble.classList.contains('show');
+
+
+if(isOpen){
+
+bubble.classList.remove('show');
+
+this.classList.remove('selected');
+
+}else{
+
+bubble.classList.add('show');
+
+this.classList.add('selected');
+
+}
+
+});
+
+});
+
+}
+
+
+/* =====================================================
+   TUTUP BUBBLE JIKA AREA DI LUAR GRAFIK DISENTUH
+   ===================================================== */
+
+document.addEventListener(
+'click',
+function(e){
+
+if(
+!e.target.closest('#chart')
+){
+
+document
+.querySelectorAll(
+'#chart .chartBubble'
+)
+.forEach(b=>{
+
+b.classList.remove('show');
+
+});
+
+document
+.querySelectorAll(
+'#chart .bar'
+)
+.forEach(b=>{
+
+b.classList.remove('selected');
+
+});
+
+}
+
+}
+);
 
 
 /* =====================================================
