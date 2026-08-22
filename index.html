@@ -417,8 +417,16 @@ box-shadow:
 .chartBubble{
 position:absolute;
 z-index:20;
+
 left:50%;
+
+/*
+   Bubble sekarang ditempatkan berdasarkan
+   posisi batang, bukan berdasarkan tinggi
+   seluruh chart.
+*/
 bottom:calc(100% + 10px);
+
 transform:
 translateX(-50%)
 translateY(5px)
@@ -456,10 +464,9 @@ opacity .18s ease,
 transform .18s ease;
 }
 
-/* Bubble aktif */
-
 .chartBubble.show{
 opacity:1;
+
 transform:
 translateX(-50%)
 translateY(0)
@@ -1692,8 +1699,7 @@ function(e){
 
 e.stopPropagation();
 
-const index=
-this.dataset.index;
+const index=this.dataset.index;
 
 
 /* =========================
@@ -1737,7 +1743,7 @@ b.classList.remove('selected');
 
 
 /* =========================
-   TOGGLE BUBBLE
+   AMBIL BUBBLE
    ========================= */
 
 const bubble=
@@ -1746,6 +1752,11 @@ document.querySelector(
 );
 
 if(!bubble)return;
+
+
+/* =========================
+   TOGGLE
+   ========================= */
 
 const isOpen=
 bubble.classList.contains('show');
@@ -1757,13 +1768,103 @@ bubble.classList.remove('show');
 
 this.classList.remove('selected');
 
-}else{
+return;
 
-bubble.classList.add('show');
+}
+
+
+/* =========================
+   AKTIFKAN BATANG
+   ========================= */
 
 this.classList.add('selected');
 
+
+/* =====================================================
+   POSISI BUBBLE
+   ===================================================== */
+
+/*
+   Bubble berada tepat di atas BATANG
+   yang disentuh.
+
+   Karena bubble merupakan child dari
+   chartBarWrap, bottom:100% akan mengikuti
+   tinggi batang tersebut.
+*/
+
+bubble.style.left='50%';
+bubble.style.right='auto';
+
+
+/* =====================================================
+   TAMPILKAN DULU
+   ===================================================== */
+
+bubble.classList.add('show');
+
+
+/* =====================================================
+   CEK POSISI AGAR TIDAK KELUAR LAYAR
+   ===================================================== */
+
+requestAnimationFrame(()=>{
+
+const bubbleRect=
+bubble.getBoundingClientRect();
+
+const chartRect=
+document
+.getElementById('chart')
+.getBoundingClientRect();
+
+const padding=8;
+
+let shift=0;
+
+
+/* =========================
+   TERLALU KE KIRI
+   ========================= */
+
+if(
+bubbleRect.left < padding
+){
+
+shift=
+padding-bubbleRect.left;
+
 }
+
+
+/* =========================
+   TERLALU KE KANAN
+   ========================= */
+
+if(
+bubbleRect.right >
+window.innerWidth-padding
+){
+
+shift=
+(window.innerWidth-padding)-
+bubbleRect.right;
+
+}
+
+
+/* =========================
+   BATASI PERGESERAN
+   ========================= */
+
+if(shift!==0){
+
+bubble.style.left=
+`calc(50% + ${shift}px)`;
+
+}
+
+});
 
 });
 
