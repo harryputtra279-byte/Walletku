@@ -470,6 +470,10 @@ font-size:13px
 display:grid
 }
 
+/* =====================================================
+   NAVBAR
+   ===================================================== */
+
 .nav{
 position:fixed;
 z-index:5;
@@ -493,13 +497,19 @@ background:transparent;
 padding:9px 16px;
 border-radius:15px;
 color:var(--muted);
-font-size:10px
+font-size:10px;
+transition:.2s
 }
 
 .nav button.active{
 background:#d8ffe9;
 color:#009f4f;
-font-weight:800
+font-weight:800;
+box-shadow:0 5px 12px rgba(0,200,83,.12)
+}
+
+.nav button:active{
+transform:scale(.95)
 }
 
 .fab{
@@ -817,12 +827,13 @@ title="Backup terenkripsi">↥</button>
 
 </section>
 
+
 <!-- =====================================================
      TRANSAKSI TERBARU DI BERANDA
-     HANYA 5 TRANSAKSI
+     AKAN DISEMBUNYIKAN SAAT RIWAYAT DIBUKA
      ===================================================== -->
 
-<section class="glass panel">
+<section class="glass panel" id="recentTransactionsPanel">
 
 <div class="head">
 <h3>Transaksi terbaru</h3>
@@ -836,17 +847,19 @@ title="Backup terenkripsi">↥</button>
 
 <!-- =====================================================
      RIWAYAT LENGKAP
-     AWALNYA TERSEMBUNYI
      ===================================================== -->
 
 <section class="glass panel" id="historyPanel">
 
 <div class="head">
+
 <div>
 <h3 class="historyTitle">Riwayat Transaksi</h3>
+
 <div class="historySubtitle" id="historySubtitle">
 Semua transaksi bulan ini
 </div>
+
 </div>
 
 <button class="link" onclick="closeHistory()">
@@ -914,11 +927,17 @@ Password backup tidak disimpan dalam bentuk asli. Simpan password backup di temp
 
 </main>
 
+
 <button
 class="fab"
 onclick="document.getElementById('add').scrollIntoView({behavior:'smooth'})">
 ＋
 </button>
+
+
+<!-- =====================================================
+     NAVBAR
+     ===================================================== -->
 
 <nav class="nav">
 
@@ -940,7 +959,13 @@ onclick="document.getElementById('add').scrollIntoView({behavior:'smooth'})">
 
 </nav>
 
+
 <div id="toast" class="toast"></div>
+
+
+<!-- =====================================================
+     PIN
+     ===================================================== -->
 
 <div class="pin-overlay hidden" id="pinOverlay">
 
@@ -974,6 +999,7 @@ Buat / ganti PIN
 
 </div>
 
+
 <script>
 
 const KEY='dompet_harry_v1';
@@ -981,25 +1007,40 @@ const KEY='dompet_harry_v1';
 let data=[];
 
 try{
-data=JSON.parse(localStorage.getItem(KEY)||'[]');
 
-if(!Array.isArray(data)) data=[];
+data=JSON.parse(
+localStorage.getItem(KEY)||'[]'
+);
+
+if(!Array.isArray(data))
+data=[];
 
 }catch(e){
+
 data=[];
+
 }
 
-const pad=n=>String(n).padStart(2,'0');
+
+const pad=n=>
+String(n).padStart(2,'0');
+
 
 const today=()=>{
+
 let d=new Date();
 
 return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+
 };
 
-const monthKey=d=>d.slice(0,7);
 
-const money=n=>new Intl.NumberFormat(
+const monthKey=d=>
+d.slice(0,7);
+
+
+const money=n=>
+new Intl.NumberFormat(
 'id-ID',
 {
 style:'currency',
@@ -1008,12 +1049,16 @@ maximumFractionDigits:0
 }
 ).format(Number(n)||0);
 
+
 const monthName=k=>{
 
 let [y,m]=k.split('-');
 
-return new Date(+y,+m-1,1)
-.toLocaleDateString(
+return new Date(
++y,
++m-1,
+1
+).toLocaleDateString(
 'id-ID',
 {
 month:'long',
@@ -1023,6 +1068,7 @@ year:'numeric'
 
 };
 
+
 function save(){
 
 localStorage.setItem(
@@ -1031,6 +1077,7 @@ JSON.stringify(data)
 );
 
 }
+
 
 function months(){
 
@@ -1044,16 +1091,21 @@ return [...s].sort().reverse();
 
 }
 
+
 function setup(){
 
-let s=document.getElementById('month');
+let s=
+document.getElementById('month');
 
 let old=s.value;
 
 let list=months();
 
-s.innerHTML=list
-.map(x=>`<option value="${x}">${monthName(x)}</option>`)
+s.innerHTML=
+list
+.map(
+x=>`<option value="${x}">${monthName(x)}</option>`
+)
 .join('');
 
 if(old && list.includes(old)){
@@ -1064,6 +1116,7 @@ document.getElementById('date').value=today();
 
 }
 
+
 function render(){
 
 setup();
@@ -1073,19 +1126,24 @@ document.getElementById('month').value
 ||
 monthKey(today());
 
-let r=data.filter(
+let r=
+data.filter(
 x=>monthKey(x.date)===mk
 );
 
-let d=r
-.filter(x=>x.type==='debit')
+let d=
+r.filter(
+x=>x.type==='debit'
+)
 .reduce(
 (a,x)=>a+(Number(x.amount)||0),
 0
 );
 
-let c=r
-.filter(x=>x.type==='credit')
+let c=
+r.filter(
+x=>x.type==='credit'
+)
 .reduce(
 (a,x)=>a+(Number(x.amount)||0),
 0
@@ -1101,11 +1159,13 @@ document.getElementById('balance')
 .textContent=money(c-d);
 
 
-/* ============================
-   BERANDA: 5 TRANSAKSI TERBARU
-   ============================ */
+/* =====================================================
+   BERANDA:
+   5 TRANSAKSI TERBARU
+   ===================================================== */
 
-let recent=[...r]
+let recent=
+[...r]
 .sort(
 (a,b)=>
 b.date.localeCompare(a.date)||
@@ -1123,9 +1183,9 @@ recent.length
 :'<div class="empty">Belum ada transaksi bulan ini.</div>';
 
 
-/* ============================
-   RIWAYAT LENGKAP
-   ============================ */
+/* =====================================================
+   RIWAYAT
+   ===================================================== */
 
 renderHistory();
 
@@ -1290,7 +1350,8 @@ confirm(
 )
 ){
 
-data=data.filter(
+data=
+data.filter(
 a=>String(a.id)!==String(id)
 );
 
@@ -1346,8 +1407,8 @@ d.getDate()-i
 let k=
 `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 
-let v=data
-.filter(
+let v=
+data.filter(
 x=>
 x.date===k &&
 x.type==='debit'
@@ -1372,7 +1433,8 @@ dateLabel:
 
 }
 
-let max=Math.max(
+let max=
+Math.max(
 ...days.map(x=>x.amount),
 1
 );
@@ -1434,7 +1496,8 @@ document.getElementById('month').value
 ||
 monthKey(today());
 
-let r=[...data]
+let r=
+[...data]
 .filter(
 x=>monthKey(x.date)===mk
 )
@@ -1444,15 +1507,19 @@ b.date.localeCompare(a.date)||
 (b.created||0)-(a.created||0)
 );
 
-let debit=r
-.filter(x=>x.type==='debit')
+let debit=
+r.filter(
+x=>x.type==='debit'
+)
 .reduce(
 (s,x)=>s+(Number(x.amount)||0),
 0
 );
 
-let credit=r
-.filter(x=>x.type==='credit')
+let credit=
+r.filter(
+x=>x.type==='credit'
+)
 .reduce(
 (s,x)=>s+(Number(x.amount)||0),
 0
@@ -1490,7 +1557,18 @@ Belum ada transaksi pada ${monthName(mk)}.
 
 function showHistory(){
 
-document.getElementById('historyPanel')
+/*
+   SEMBUNYIKAN "TRANSAKSI TERBARU"
+   KARENA SEMUA TRANSAKSI SUDAH ADA DI RIWAYAT
+*/
+
+document
+.getElementById('recentTransactionsPanel')
+.style.display='none';
+
+
+document
+.getElementById('historyPanel')
 .classList.add('show');
 
 renderHistory();
@@ -1499,7 +1577,8 @@ setNav('navHistory');
 
 setTimeout(()=>{
 
-document.getElementById('historyPanel')
+document
+.getElementById('historyPanel')
 .scrollIntoView({
 behavior:'smooth',
 block:'start'
@@ -1516,8 +1595,20 @@ block:'start'
 
 function closeHistory(){
 
-document.getElementById('historyPanel')
+document
+.getElementById('historyPanel')
 .classList.remove('show');
+
+
+/*
+   KEMBALIKAN TRANSAKSI TERBARU
+   SAAT KEMBALI KE BERANDA
+*/
+
+document
+.getElementById('recentTransactionsPanel')
+.style.display='block';
+
 
 setNav('navHome');
 
@@ -1556,9 +1647,23 @@ document
 }
 
 
+/* =====================================================
+   BERANDA
+   ===================================================== */
+
 function goHome(){
 
-document.getElementById('historyPanel')
+/*
+   TAMPILKAN KEMBALI TRANSAKSI TERBARU
+*/
+
+document
+.getElementById('recentTransactionsPanel')
+.style.display='block';
+
+
+document
+.getElementById('historyPanel')
 .classList.remove('show');
 
 setNav('navHome');
@@ -1571,14 +1676,30 @@ behavior:'smooth'
 }
 
 
+/* =====================================================
+   TRANSAKSI
+   ===================================================== */
+
 function goTransaction(){
 
-document.getElementById('historyPanel')
+/*
+   TRANSAKSI TERBARU TETAP TERSEMBUNYI
+   JIKA SEDANG MASUK KE FORM TRANSAKSI
+*/
+
+document
+.getElementById('recentTransactionsPanel')
+.style.display='none';
+
+
+document
+.getElementById('historyPanel')
 .classList.remove('show');
 
 setNav('navTransaction');
 
-document.getElementById('add')
+document
+.getElementById('add')
 .scrollIntoView({
 behavior:'smooth',
 block:'start'
@@ -1587,14 +1708,24 @@ block:'start'
 }
 
 
+/* =====================================================
+   BACKUP
+   ===================================================== */
+
 function goBackup(){
 
-document.getElementById('historyPanel')
+document
+.getElementById('recentTransactionsPanel')
+.style.display='none';
+
+document
+.getElementById('historyPanel')
 .classList.remove('show');
 
 setNav('navBackup');
 
-document.querySelector('.backup-card')
+document
+.querySelector('.backup-card')
 .scrollIntoView({
 behavior:'smooth',
 block:'start'
@@ -1623,6 +1754,10 @@ c=>({
 
 }
 
+
+/* =====================================================
+   TOAST
+   ===================================================== */
 
 function toast(s){
 
@@ -2717,4 +2852,4 @@ dhShowPin(false);
 </script>
 
 </body>
-                  </html>
+    </html>
