@@ -1,3 +1,9 @@
+/* =========================================================
+   DOMPET HARRY - app.js
+   FIX: Grafik 7 hari + dropdown bulan
+   Semua fungsi lain dipertahankan dari source terakhir.
+   ========================================================= */
+
 const KEY='dompet_harry_v1';
 
 let data=[];
@@ -77,10 +83,21 @@ JSON.stringify(data)
 
 function months(){
 
-let s=new Set(
-data.map(x=>monthKey(x.date))
-);
+let s=new Set();
 
+for(const x of data){
+
+if(!x || !x.date) continue;
+
+const key=monthKey(String(x.date));
+
+if(/^\d{4}-\d{2}$/.test(key)){
+s.add(key);
+}
+
+}
+
+/* Bulan berjalan selalu tersedia. */
 s.add(monthKey(today()));
 
 return [...s].sort().reverse();
@@ -88,58 +105,90 @@ return [...s].sort().reverse();
 }
 
 
-function setup(){
+function setup(preserveMonth=true){
 
-let s=
-document.getElementById('month');
+const s=document.getElementById('month');
 
-let old=s.value;
+if(!s)return;
 
-let list=months();
+const current=s.value;
+const list=months();
 
-s.innerHTML=
-list
-.map(
-x=>`<option value="${x}">${monthName(x)}</option>`
-)
+/*
+   Dropdown bulan hanya dibangun ulang bila daftar bulan berubah.
+   Ini mencegah pilihan bulan kembali/ter-reset saat render().
+*/
+const optionHTML=list
+.map(x=>`<option value="${x}">${monthName(x)}</option>`)
 .join('');
 
-if(old && list.includes(old)){
-s.value=old;
+if(s.innerHTML!==optionHTML){
+
+s.innerHTML=optionHTML;
+
 }
 
-document.getElementById('date').value=today();
+if(preserveMonth && current && list.includes(current)){
+
+s.value=current;
+
+}else if(!s.value || !list.includes(s.value)){
+
+s.value=monthKey(today());
+
+}
+
+/* Tanggal form selalu mengikuti hari ini hanya bila kosong/invalid. */
+const dateInput=document.getElementById('date');
+
+if(dateInput && !dateInput.value){
+
+dateInput.value=today();
+
+}
 
 }
 
 
 function render(){
 
-setup();
+/*
+   Simpan bulan yang sedang dipilih sebelum render.
+   Ini penting agar memilih bulan lama tidak langsung kembali
+   ke bulan berjalan.
+*/
+const monthSelect=document.getElementById('month');
 
-let mk=
-document.getElementById('month').value
-||
-monthKey(today());
+const selectedMonth=
+monthSelect && monthSelect.value
+?monthSelect.value
+:monthKey(today());
 
-let r=
-data.filter(
-x=>monthKey(x.date)===mk
+setup(true);
+
+/* Pulihkan pilihan bulan setelah setup(). */
+const mk=
+months().includes(selectedMonth)
+?selectedMonth
+:monthKey(today());
+
+if(monthSelect){
+monthSelect.value=mk;
+}
+
+let r=data.filter(
+x=>monthKey(String(x.date))===mk
 );
 
-let d=
-r.filter(
-x=>x.type==='debit'
-)
+let d=r
+.filter(x=>x.type==='debit')
 .reduce(
 (a,x)=>a+(Number(x.amount)||0),
 0
 );
 
-let c=
-r.filter(
-x=>x.type==='credit'
-)
+let c=r
+.filter(x=>x.type==='credit')
 .reduce(
 (a,x)=>a+(Number(x.amount)||0),
 0
@@ -157,14 +206,13 @@ document.getElementById('balance')
 
 /* =====================================================
    BERANDA:
-   5 TRANSAKSI TERBARU
+   5 TRANSAKSI TERBARU PADA BULAN YANG DIPILIH
    ===================================================== */
 
-let recent=
-[...r]
+let recent=[...r]
 .sort(
 (a,b)=>
-b.date.localeCompare(a.date)||
+String(b.date).localeCompare(String(a.date))||
 (b.created||0)-(a.created||0)
 )
 .slice(0,5);
@@ -173,15 +221,9 @@ document.getElementById('transactions')
 .innerHTML=
 
 recent.length
-
 ?recent.map(tx).join('')
-
 :'<div class="empty">Belum ada transaksi bulan ini.</div>';
 
-
-/* =====================================================
-   RIWAYAT
-   ===================================================== */
 
 renderHistory();
 
@@ -395,6 +437,10 @@ const dayNames=[
 'Sabtu'
 ];
 
+/*
+   Grafik SELALU memakai 7 hari kalender terakhir dari hari ini.
+   Tidak terpengaruh oleh bulan yang sedang dipilih pada dropdown.
+*/
 for(let i=6;i>=0;i--){
 
 let d=new Date();
@@ -408,12 +454,30 @@ d.getDate()-i
 let k=
 `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 
+/*
+   Normalisasi tanggal transaksi.
+   Ini membuat grafik tetap membaca data lama walaupun nilai
+   tanggal tersimpan sebagai string dengan format yang sedikit berbeda.
+*/
 let v=data
-.filter(
-x=>
-x.date===k &&
-x.type==='debit'
-)
+.filter(x=>{
+
+if(!x || x.type!=='debit' || x.date==null)
+return false;
+
+const raw=String(x.date).trim();
+
+/* Format utama aplikasi: YYYY-MM-DD */
+if(raw.slice(0,10)===k)
+return true;
+
+/* Dukungan tambahan jika ada data lama berupa tanggal ISO. */
+if(raw.includes('T') && raw.slice(0,10)===k)
+return true;
+
+return false;
+
+})
 .reduce(
 (s,x)=>s+(Number(x.amount)||0),
 0
@@ -480,15 +544,10 @@ class="bar"
 data-index="${index}"
 style="height:${Math.max(
 7,
-x.amount/max*100
+(x.amount/max)*100
 )}%"
 title=""
 ></div>
-
-
-<!-- =========================
-     BUBBLE DETAIL
-     ========================= -->
 
 <div
 class="chartBubble"
@@ -525,7 +584,6 @@ ${money(x.amount)}
 
 </div>
 
-
 <div class="chartLabel">
 
 <b>${x.day.slice(0,3)}</b>
@@ -556,7 +614,8 @@ function(e){
 
 e.stopPropagation();
 
-const index=this.dataset.index;
+const index=
+this.dataset.index;
 
 
 /* =========================
@@ -608,12 +667,8 @@ document.querySelector(
 `#chart .chartBubble[data-bubble="${index}"]`
 );
 
-if(!bubble)return;
-
-
-/* =========================
-   TOGGLE
-   ========================= */
+if(!bubble)
+return;
 
 const isOpen=
 bubble.classList.contains('show');
@@ -631,63 +686,49 @@ return;
 
 
 /* =========================
-   AKTIFKAN BATANG
+   PILIH BATANG
    ========================= */
 
 this.classList.add('selected');
 
 
-/* =====================================================
-   POSISI BUBBLE
-   ===================================================== */
-
 /*
-   Bubble berada tepat di atas BATANG
-   yang disentuh.
+   Bubble mengikuti UJUNG BATANG.
 
-   Karena bubble merupakan child dari
-   chartBarWrap, bottom:100% akan mengikuti
-   tinggi batang tersebut.
+   Karena bubble berada di dalam .chartBarWrap,
+   maka posisi vertikal dihitung langsung dari
+   tinggi batang yang sebenarnya.
+
+   Ini memperbaiki masalah:
+   - batang pendek -> bubble rendah
+   - batang tinggi -> bubble tinggi
 */
-
 bubble.style.left='50%';
+
 bubble.style.right='auto';
-bubble.style.bottom =
-(this.offsetHeight + 10) + 'px';
 
-
-/* =====================================================
-   TAMPILKAN DULU
-   ===================================================== */
+bubble.style.bottom=
+(this.offsetHeight+10)+'px';
 
 bubble.classList.add('show');
 
 
-/* =====================================================
-   CEK POSISI AGAR TIDAK KELUAR LAYAR
-   ===================================================== */
-
+/*
+   Setelah bubble tampil, cek posisi horizontal.
+   Khusus batang paling kiri dan kanan agar bubble
+   tidak terpotong batas layar.
+*/
 requestAnimationFrame(()=>{
 
 const bubbleRect=
 bubble.getBoundingClientRect();
 
-const chartRect=
-document
-.getElementById('chart')
-.getBoundingClientRect();
-
 const padding=8;
 
 let shift=0;
 
-
-/* =========================
-   TERLALU KE KIRI
-   ========================= */
-
 if(
-bubbleRect.left < padding
+bubbleRect.left<padding
 ){
 
 shift=
@@ -695,13 +736,8 @@ padding-bubbleRect.left;
 
 }
 
-
-/* =========================
-   TERLALU KE KANAN
-   ========================= */
-
 if(
-bubbleRect.right >
+bubbleRect.right>
 window.innerWidth-padding
 ){
 
@@ -710,11 +746,6 @@ shift=
 bubbleRect.right;
 
 }
-
-
-/* =========================
-   BATASI PERGESERAN
-   ========================= */
 
 if(shift!==0){
 
@@ -728,8 +759,6 @@ bubble.style.left=
 });
 
 });
-
-}
 
 
 /* =====================================================
@@ -784,11 +813,11 @@ monthKey(today());
 let r=
 [...data]
 .filter(
-x=>monthKey(x.date)===mk
+x=>monthKey(String(x.date))===mk
 )
 .sort(
 (a,b)=>
-b.date.localeCompare(a.date)||
+String(b.date).localeCompare(String(a.date))||
 (b.created||0)-(a.created||0)
 );
 
@@ -842,15 +871,9 @@ Belum ada transaksi pada ${monthName(mk)}.
 
 function showHistory(){
 
-/*
-   SEMBUNYIKAN "TRANSAKSI TERBARU"
-   KARENA SEMUA TRANSAKSI SUDAH ADA DI RIWAYAT
-*/
-
 document
 .getElementById('recentTransactionsPanel')
 .style.display='none';
-
 
 document
 .getElementById('historyPanel')
@@ -884,16 +907,9 @@ document
 .getElementById('historyPanel')
 .classList.remove('show');
 
-
-/*
-   KEMBALIKAN TRANSAKSI TERBARU
-   SAAT KEMBALI KE BERANDA
-*/
-
 document
 .getElementById('recentTransactionsPanel')
 .style.display='block';
-
 
 setNav('navHome');
 
@@ -938,14 +954,9 @@ document
 
 function goHome(){
 
-/*
-   TAMPILKAN KEMBALI TRANSAKSI TERBARU
-*/
-
 document
 .getElementById('recentTransactionsPanel')
 .style.display='block';
-
 
 document
 .getElementById('historyPanel')
@@ -967,15 +978,9 @@ behavior:'smooth'
 
 function goTransaction(){
 
-/*
-   TRANSAKSI TERBARU TETAP TERSEMBUNYI
-   JIKA SEDANG MASUK KE FORM TRANSAKSI
-*/
-
 document
 .getElementById('recentTransactionsPanel')
 .style.display='none';
-
 
 document
 .getElementById('historyPanel')
@@ -1065,7 +1070,8 @@ setTimeout(
    BACKUP SECURITY
    ========================================================= */
 
-const BACKUP_FORMAT='dompet-harry-backup';
+const BACKUP_FORMAT=
+'dompet-harry-backup';
 
 const BACKUP_VERSION=2;
 
@@ -1074,9 +1080,11 @@ const PBKDF2_ITERATIONS=250000;
 const BACKUP_PASSWORD_KEY=
 'dompet_harry_backup_verifier_v1';
 
-const encoder=new TextEncoder();
+const encoder=
+new TextEncoder();
 
-const decoder=new TextDecoder();
+const decoder=
+new TextDecoder();
 
 
 function bytesToBase64(bytes){
@@ -1182,7 +1190,8 @@ async function createPasswordVerifier(
 password
 ){
 
-const salt=randomBytes(16);
+const salt=
+randomBytes(16);
 
 const baseKey=
 await crypto.subtle.importKey(
@@ -1259,7 +1268,8 @@ new Uint8Array(bits);
 
 if(
 actual.length!==expected.length
-)return false;
+)
+return false;
 
 let result=0;
 
@@ -1297,7 +1307,8 @@ prompt(
 'Simpan password ini di tempat aman.'
 );
 
-if(p===null)return null;
+if(p===null)
+return null;
 
 if(p.length<10){
 
@@ -1371,7 +1382,8 @@ prompt(
 'Masukkan password backup Dompet Harry.'
 );
 
-if(p===null)return null;
+if(p===null)
+return null;
 
 if(p.length<1){
 
@@ -1403,6 +1415,9 @@ return p;
 
 }
 
+/* =========================================================
+   BACKUP DATA
+   ========================================================= */
 
 async function backupData(){
 
@@ -1427,14 +1442,16 @@ if(
 !confirm(
 'Belum ada transaksi. Tetap membuat backup kosong?'
 )
-)return;
+)
+return;
 
 }
 
 const password=
 await getBackupPassword();
 
-if(password===null)return;
+if(password===null)
+return;
 
 
 const payload={
@@ -1533,7 +1550,8 @@ URL.createObjectURL(blob);
 const a=
 document.createElement('a');
 
-const d=new Date();
+const d=
+new Date();
 
 const filename=
 `Dompet-Harry-Backup-${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}.dhbackup`;
@@ -1570,6 +1588,10 @@ alert(
 }
 
 
+/* =========================================================
+   RESTORE DATA
+   ========================================================= */
+
 async function restoreData(event){
 
 const file=
@@ -1578,7 +1600,8 @@ event.target.files[0];
 
 event.target.value='';
 
-if(!file)return;
+if(!file)
+return;
 
 try{
 
@@ -1633,7 +1656,8 @@ return;
 const password=
 await getBackupPassword();
 
-if(password===null)return;
+if(password===null)
+return;
 
 const salt=
 base64ToBytes(backup.salt);
@@ -1709,7 +1733,8 @@ confirm(
 `Lanjutkan?`
 );
 
-if(!ok)return;
+if(!ok)
+return;
 
 const clean=[];
 
@@ -2015,6 +2040,10 @@ alert(
 }
 
 
+/* =========================================================
+   PIN EVENT
+   ========================================================= */
+
 document
 .getElementById('pinAction')
 .addEventListener(
@@ -2132,4 +2161,4 @@ sessionStorage.getItem('dh_unlocked')!=='1'
 
 dhShowPin(false);
 
-}
+   }
