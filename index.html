@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f6fb">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+
+<title>Dompet Harry</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<main class="app">
+
+<header class="top">
+
+<div class="brand">
+<div class="logo">₿</div>
+<div>
+<h1>Wallet Harry</h1>
+<div class="muted">Keuangan pribadi</div>
+</div>
+</div>
+
+<div style="display:flex;gap:7px">
+
+<button class="iconbtn"
+onclick="pinSetup()"
+title="PIN 6 digit">🔐</button>
+
+<button class="iconbtn"
+onclick="backupData()"
+title="Backup terenkripsi">↥</button>
+
+</div>
+
+</header>
+
+<section class="glass hero">
+
+<div class="heroTop">
+
+<div>
+<div class="muted">Saldo bersih bulan ini</div>
+<h2 id="balance">Rp0</h2>
+</div>
+
+<div class="month">
+<select id="month" onchange="render()"></select>
+</div>
+
+</div>
+
+<div class="minirow">
+
+<div class="mini">
+<span>Pengeluaran</span>
+<b class="red" id="expense">Rp0</b>
+</div>
+
+<div class="mini">
+<span>Pemasukan</span>
+<b class="green" id="income">Rp0</b>
+</div>
+
+</div>
+
+</section>
+
+<section class="quick">
+
+<button class="glass q debit" onclick="setType('debit')">
+<div class="round">↓</div>
+<b>Catat pengeluaran</b>
+<p>Debit / uang keluar</p>
+</button>
+
+<button class="glass q credit" onclick="setType('credit')">
+<div class="round">↑</div>
+<b>Catat pemasukan</b>
+<p>Kredit / uang masuk</p>
+</button>
+
+</section>
+
+<section class="glass panel" id="add">
+
+<div class="head">
+<h3>Tambah transaksi</h3>
+<button class="link" onclick="resetForm()">Reset</button>
+</div>
+
+<form class="form" onsubmit="addTx(event)">
+
+<div class="row">
+
+<div class="field">
+<label>Tanggal</label>
+<input id="date" type="date" required>
+</div>
+
+<div class="field">
+<label>Tipe</label>
+<select id="type">
+<option value="debit">Debit</option>
+<option value="credit">Kredit</option>
+</select>
+</div>
+
+</div>
+
+<div class="field">
+<label>Keterangan</label>
+<input id="desc" placeholder="Contoh: Belanja bulanan" required>
+</div>
+
+<div class="row">
+
+<div class="field">
+<label>Kategori</label>
+
+<select id="cat">
+<option>🍜 Makanan</option>
+<option>🚗 Transportasi</option>
+<option>🏠 Rumah</option>
+<option>💡 Tagihan</option>
+<option>🛍️ Belanja</option>
+<option>🎮 Hiburan</option>
+<option>💊 Kesehatan</option>
+<option>📚 Pendidikan</option>
+<option>📈 Investasi</option>
+<option>💼 Gaji</option>
+<option>🎁 Bonus</option>
+<option>📦 Lainnya</option>
+</select>
+
+</div>
+
+<div class="field">
+<label>Nominal (Rp)</label>
+<input id="amount" type="number" min="1" required placeholder="50000">
+</div>
+
+</div>
+
+<button class="primary">Simpan transaksi</button>
+
+</form>
+
+</section>
+
+<section class="glass panel">
+
+<div class="head">
+<h3>Pengeluaran 7 hari terakhir</h3>
+<span class="muted" id="weekTotal">Rp0</span>
+</div>
+
+<div class="chart" id="chart"></div>
+
+<div class="labels">
+<span>7h lalu</span>
+<span>Hari ini</span>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     TRANSAKSI TERBARU DI BERANDA
+     AKAN DISEMBUNYIKAN SAAT RIWAYAT DIBUKA
+     ===================================================== -->
+
+<section class="glass panel" id="recentTransactionsPanel">
+
+<div class="head">
+<h3>Transaksi terbaru</h3>
+<span class="muted">5 terakhir</span>
+</div>
+
+<div id="transactions"></div>
+
+</section>
+
+
+<!-- =====================================================
+     RIWAYAT LENGKAP
+     ===================================================== -->
+
+<section class="glass panel" id="historyPanel">
+
+<div class="head">
+
+<div>
+<h3 class="historyTitle">Riwayat Transaksi</h3>
+
+<div class="historySubtitle" id="historySubtitle">
+Semua transaksi bulan ini
+</div>
+
+</div>
+
+<button class="link" onclick="closeHistory()">
+Tutup
+</button>
+
+</div>
+
+<div class="historySummary">
+
+<div class="historySummaryBox">
+<span>Total Pengeluaran</span>
+<b class="red" id="historyExpense">Rp0</b>
+</div>
+
+<div class="historySummaryBox">
+<span>Total Pemasukan</span>
+<b class="green" id="historyIncome">Rp0</b>
+</div>
+
+</div>
+
+<div id="historyList" class="historyList"></div>
+
+</section>
+
+
+<section class="glass panel backup-card">
+
+<div class="head">
+<h3>Backup & Restore</h3>
+<span class="muted">Lokal</span>
+</div>
+
+<div class="backup-buttons">
+
+<button class="backup-btn backup" onclick="backupData()">
+⬇ Backup
+</button>
+
+<button class="backup-btn restore" onclick="document.getElementById('restoreFile').click()">
+↥ Restore
+</button>
+
+</div>
+
+<input
+id="restoreFile"
+type="file"
+accept=".dhbackup"
+style="display:none"
+onchange="restoreData(event)"
+>
+
+<div class="backup-note">
+Backup Dompet Harry menggunakan enkripsi AES-256-GCM.
+Password backup dibuat satu kali dan digunakan kembali untuk backup berikutnya.
+</div>
+
+<div class="security-note">
+Password backup tidak disimpan dalam bentuk asli. Simpan password backup di tempat aman. Jika lupa, backup terenkripsi tidak dapat dipulihkan.
+</div>
+
+</section>
+
+</main>
+
+
+<button
+class="fab"
+onclick="document.getElementById('add').scrollIntoView({behavior:'smooth'})">
+＋
+</button>
+
+
+<!-- =====================================================
+     NAVBAR
+     ===================================================== -->
+
+<nav class="nav">
+
+<button id="navHome" class="active" onclick="goHome()">
+⌂<br>Beranda
+</button>
+
+<button id="navTransaction" onclick="goTransaction()">
+☷<br>Transaksi
+</button>
+
+<button id="navHistory" onclick="showHistory()">
+▣<br>Riwayat
+</button>
+
+<button id="navBackup" onclick="goBackup()">
+↥<br>Backup
+</button>
+
+</nav>
+
+
+<div id="toast" class="toast"></div>
+
+
+<!-- =====================================================
+     PIN
+     ===================================================== -->
+
+<div class="pin-overlay hidden" id="pinOverlay">
+
+<div class="pin-card">
+
+<h2 id="pinTitle">Masukkan PIN</h2>
+
+<p id="pinText">
+Dompet Harry dikunci. Masukkan PIN 6 digit untuk melanjutkan.
+</p>
+
+<input
+id="pinInput"
+class="pin-input"
+type="password"
+inputmode="numeric"
+maxlength="6"
+autocomplete="off"
+placeholder="••••••"
+>
+
+<button class="pin-btn" id="pinAction">
+Buka Dompet
+</button>
+
+<button class="pin-secondary" id="pinChange">
+Buat / ganti PIN
+</button>
+
+</div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+    </html>
