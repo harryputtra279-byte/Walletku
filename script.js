@@ -499,7 +499,7 @@ monthKey(today());
 
 const months=[mk,monthOffset(mk,-1),monthOffset(mk,-2)];
 
-const colors=['#00e676','#2dd4c8','#4fa8e8'];
+const colors=['#ff4f9a','#ffab1f','#1fd6b5'];
 
 const totals=months.map(m=>
 
@@ -516,6 +516,8 @@ const track=document.getElementById('ringTrack');
 if(sum3<=0){
 
 track.style.background='#ffffff55';
+
+document.getElementById('ringLabels').innerHTML='';
 
 }else{
 
@@ -539,6 +541,37 @@ return `${colors[i]} ${start}deg ${end}deg`;
 
 track.style.background=`conic-gradient(${stops.join(',')})`;
 
+/*
+   Label persen besar langsung di tengah tiap segmen cincin,
+   posisinya dihitung pakai trigonometri sederhana.
+*/
+
+let accL=0;
+
+const labelHtml=months.map((m,i)=>{
+
+const pct=totals[i]/sum3*100;
+
+const midDeg=(accL+pct/2)/100*360;
+
+accL+=pct;
+
+if(pct<=0)return '';
+
+const rad=midDeg*Math.PI/180;
+
+const R=42;
+
+const x=50+Math.sin(rad)*R;
+
+const y=50-Math.cos(rad)*R;
+
+return `<span class="ringSegLabel" style="left:${x}%;top:${y}%">${pct.toFixed(0)}%</span>`;
+
+}).join('');
+
+document.getElementById('ringLabels').innerHTML=labelHtml;
+
 }
 
 document.getElementById('ringRange').textContent=
@@ -547,18 +580,21 @@ document.getElementById('ringRange').textContent=
 document.getElementById('ringAmount').textContent=
 money(totals[0]);
 
-const income=
-data
-.filter(x=>monthKey(x.date)===mk && x.type==='credit')
-.reduce((s,x)=>s+(Number(x.amount)||0),0);
+const incomes=months.map(m=>
 
-const sisa=income-totals[0];
+data
+.filter(x=>monthKey(x.date)===m && x.type==='credit')
+.reduce((s,x)=>s+(Number(x.amount)||0),0)
+
+);
+
+const sisas=months.map((m,i)=>incomes[i]-totals[i]);
 
 const sisaEl=document.getElementById('ringSisa');
 
-sisaEl.textContent=`Sisa ${money(sisa)}`;
+sisaEl.textContent=`Sisa ${money(sisas[0])}`;
 
-sisaEl.className='ringCenterSisa '+(sisa<0?'red':'green');
+sisaEl.className='ringCenterSisa '+(sisas[0]<0?'red':'green');
 
 document.getElementById('ringLegend').innerHTML=
 
@@ -572,6 +608,7 @@ return `
 <div class="ringLegendMain">
 <div class="ringLegendMonth">${monthShortLabel(m)}</div>
 <div class="ringLegendPct">${pct.toFixed(0)}% dari 3 bulan</div>
+<div class="ringLegendSisa ${sisas[i]<0?'red':'green'}">Sisa ${money(sisas[i])}</div>
 </div>
 <div class="ringLegendAmount">${money(totals[i])}</div>
 </div>
