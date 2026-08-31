@@ -492,6 +492,8 @@ return new Date(+y,+m-1,1)
 
 function renderRingChart(){
 
+try{
+
 let mk=
 document.getElementById('month').value
 ||
@@ -615,6 +617,12 @@ return `
 `;
 
 }).join('');
+
+}catch(e){
+
+console.error('Gagal merender ringkasan 3 bulan (grafik lain tetap aman):',e);
+
+}
 
 }
 
