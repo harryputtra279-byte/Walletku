@@ -324,8 +324,8 @@ padding:8px 0 4px
 
 .ringChart{
 position:relative;
-width:210px;
-height:210px;
+width:236px;
+height:236px;
 border-radius:50%
 }
 
@@ -339,7 +339,7 @@ transition:background .3s ease
 
 .ringCenter{
 position:absolute;
-inset:15%;
+inset:24%;
 border-radius:50%;
 background:radial-gradient(circle at 32% 28%,#ffffff,#eef0f5 75%);
 border:1px solid rgba(255,255,255,.9);

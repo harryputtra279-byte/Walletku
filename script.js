@@ -562,7 +562,7 @@ if(pct<=0)return '';
 
 const rad=midDeg*Math.PI/180;
 
-const R=42;
+const R=38;
 
 const x=50+Math.sin(rad)*R;
 
@@ -592,11 +592,16 @@ data
 
 const sisas=months.map((m,i)=>incomes[i]-totals[i]);
 
+const sisa3=sisas.reduce((a,b)=>a+b,0);
+
 const sisaEl=document.getElementById('ringSisa');
 
-sisaEl.textContent=`Sisa ${money(sisas[0])}`;
+sisaEl.textContent=`Sisa ${money(sisa3)}`;
 
-sisaEl.className='ringCenterSisa '+(sisas[0]<0?'red':'green');
+sisaEl.className='ringCenterSisa '+(sisa3<0?'red':'green');
+
+document.getElementById('ringAmount').textContent=
+money(sum3);
 
 document.getElementById('ringLegend').innerHTML=
 
