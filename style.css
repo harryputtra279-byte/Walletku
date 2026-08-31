@@ -313,6 +313,109 @@ box-shadow:0 10px 22px #00c8533b
 }
 
 /* =========================
+   RINGKASAN 3 BULAN (grafik lingkaran)
+   ========================= */
+
+.ringWrap{
+display:flex;
+justify-content:center;
+padding:8px 0 4px
+}
+
+.ringChart{
+position:relative;
+width:210px;
+height:210px;
+border-radius:50%
+}
+
+.ringTrack{
+position:absolute;
+inset:0;
+border-radius:50%;
+background:#ffffff55;
+transition:background .3s ease
+}
+
+.ringCenter{
+position:absolute;
+inset:15%;
+border-radius:50%;
+background:var(--glass2);
+backdrop-filter:blur(24px) saturate(150%);
+-webkit-backdrop-filter:blur(24px) saturate(150%);
+border:1px solid var(--line);
+box-shadow:inset 0 2px 10px rgba(255,255,255,.55),var(--shadow);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+gap:3px
+}
+
+.ringCenterLabel{
+font-size:10px;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:.6px
+}
+
+.ringCenterAmount{
+font-size:19px;
+font-weight:900;
+color:var(--txt)
+}
+
+.ringCenterSisa{
+font-size:10.5px;
+font-weight:800
+}
+
+.ringLegend{
+display:grid;
+gap:8px;
+margin-top:16px
+}
+
+.ringLegendRow{
+display:flex;
+align-items:center;
+gap:9px;
+padding:9px 11px;
+border-radius:14px;
+background:#ffffff72
+}
+
+.ringDot{
+width:11px;
+height:11px;
+border-radius:50%;
+flex-shrink:0
+}
+
+.ringLegendMain{
+flex:1;
+min-width:0
+}
+
+.ringLegendMonth{
+font-size:12px;
+font-weight:700
+}
+
+.ringLegendPct{
+font-size:10px;
+color:var(--muted)
+}
+
+.ringLegendAmount{
+font-size:12px;
+font-weight:800;
+white-space:nowrap
+}
+
+/* =========================
    GRAFIK 7 HARI
    ========================= */
 

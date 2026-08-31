@@ -272,6 +272,8 @@ recent.length
 
 renderHistory();
 
+renderRingChart();
+
 drawChart();
 
 }
@@ -455,6 +457,127 @@ renderHistory();
 }
 
 }
+
+}
+
+
+/* =====================================================
+   RINGKASAN 3 BULAN (grafik lingkaran / donut)
+   ===================================================== */
+
+function monthOffset(k,delta){
+
+let [y,m]=k.split('-').map(Number);
+
+m+=delta;
+
+while(m>12){m-=12;y+=1;}
+
+while(m<1){m+=12;y-=1;}
+
+return `${y}-${String(m).padStart(2,'0')}`;
+
+}
+
+
+function monthShortLabel(k){
+
+let [y,m]=k.split('-');
+
+return new Date(+y,+m-1,1)
+.toLocaleDateString('id-ID',{month:'short',year:'numeric'});
+
+}
+
+
+function renderRingChart(){
+
+let mk=
+document.getElementById('month').value
+||
+monthKey(today());
+
+const months=[mk,monthOffset(mk,-1),monthOffset(mk,-2)];
+
+const colors=['#00e676','#2dd4c8','#4fa8e8'];
+
+const totals=months.map(m=>
+
+data
+.filter(x=>monthKey(x.date)===m && x.type==='debit')
+.reduce((s,x)=>s+(Number(x.amount)||0),0)
+
+);
+
+const sum3=totals.reduce((a,b)=>a+b,0);
+
+const track=document.getElementById('ringTrack');
+
+if(sum3<=0){
+
+track.style.background='#ffffff55';
+
+}else{
+
+const gap=3;
+
+let acc=0;
+
+const stops=months.map((m,i)=>{
+
+const pct=totals[i]/sum3*100;
+
+const start=acc/100*360;
+
+acc+=pct;
+
+const end=Math.max(start,acc/100*360-gap);
+
+return `${colors[i]} ${start}deg ${end}deg`;
+
+});
+
+track.style.background=`conic-gradient(${stops.join(',')})`;
+
+}
+
+document.getElementById('ringRange').textContent=
+`${monthShortLabel(months[2])} - ${monthShortLabel(months[0])}`;
+
+document.getElementById('ringAmount').textContent=
+money(totals[0]);
+
+const income=
+data
+.filter(x=>monthKey(x.date)===mk && x.type==='credit')
+.reduce((s,x)=>s+(Number(x.amount)||0),0);
+
+const sisa=income-totals[0];
+
+const sisaEl=document.getElementById('ringSisa');
+
+sisaEl.textContent=`Sisa ${money(sisa)}`;
+
+sisaEl.className='ringCenterSisa '+(sisa<0?'red':'green');
+
+document.getElementById('ringLegend').innerHTML=
+
+months.map((m,i)=>{
+
+const pct=sum3>0?(totals[i]/sum3*100):0;
+
+return `
+<div class="ringLegendRow">
+<span class="ringDot" style="background:${colors[i]}"></span>
+<div class="ringLegendMain">
+<div class="ringLegendMonth">${monthShortLabel(m)}</div>
+<div class="ringLegendPct">${pct.toFixed(0)}% dari 3 bulan</div>
+</div>
+<div class="ringLegendAmount">${money(totals[i])}</div>
+</div>
+`;
+
+}).join('');
 
 }
 
