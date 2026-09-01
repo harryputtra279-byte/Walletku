@@ -511,7 +511,31 @@ data
 
 );
 
+const incomes=months.map(m=>
+
+data
+.filter(x=>monthKey(x.date)===m && x.type==='credit')
+.reduce((s,x)=>s+(Number(x.amount)||0),0)
+
+);
+
 const sum3=totals.reduce((a,b)=>a+b,0);
+
+const allTimeExpense=
+
+data
+.filter(x=>x.type==='debit')
+.reduce((s,x)=>s+(Number(x.amount)||0),0);
+
+const allTimeIncome=
+
+data
+.filter(x=>x.type==='credit')
+.reduce((s,x)=>s+(Number(x.amount)||0),0);
+
+document.getElementById('ringAllTime').textContent=
+
+`Jumlah seluruh saldo = ${money(allTimeIncome-allTimeExpense)}`;
 
 const track=document.getElementById('ringTrack');
 
@@ -544,21 +568,23 @@ return `${colors[i]} ${start}deg ${end}deg`;
 track.style.background=`conic-gradient(${stops.join(',')})`;
 
 /*
-   Label persen besar langsung di tengah tiap segmen cincin,
-   posisinya dihitung pakai trigonometri sederhana.
+   Posisi label persen mengikuti porsi pengeluaran di cincin
+   (biar tetap pas di tengah tiap segmen visualnya), TAPI angka
+   yang ditampilkan adalah pengeluaran dibanding pemasukan bulan
+   itu sendiri, bukan porsi terhadap 3 bulan.
 */
 
 let accL=0;
 
 const labelHtml=months.map((m,i)=>{
 
-const pct=totals[i]/sum3*100;
+const arcPct=totals[i]/sum3*100;
 
-const midDeg=(accL+pct/2)/100*360;
+const midDeg=(accL+arcPct/2)/100*360;
 
-accL+=pct;
+accL+=arcPct;
 
-if(pct<=0)return '';
+if(arcPct<=0)return '';
 
 const rad=midDeg*Math.PI/180;
 
@@ -568,7 +594,9 @@ const x=50+Math.sin(rad)*R;
 
 const y=50-Math.cos(rad)*R;
 
-return `<span class="ringSegLabel" style="left:${x}%;top:${y}%">${pct.toFixed(0)}%</span>`;
+const pctVsIncome=incomes[i]>0?(totals[i]/incomes[i]*100):0;
+
+return `<span class="ringSegLabel" style="left:${x}%;top:${y}%">${pctVsIncome.toFixed(0)}%</span>`;
 
 }).join('');
 
@@ -578,17 +606,6 @@ document.getElementById('ringLabels').innerHTML=labelHtml;
 
 document.getElementById('ringRange').textContent=
 `${monthShortLabel(months[2])} - ${monthShortLabel(months[0])}`;
-
-document.getElementById('ringAmount').textContent=
-money(totals[0]);
-
-const incomes=months.map(m=>
-
-data
-.filter(x=>monthKey(x.date)===m && x.type==='credit')
-.reduce((s,x)=>s+(Number(x.amount)||0),0)
-
-);
 
 const sisas=months.map((m,i)=>incomes[i]-totals[i]);
 
@@ -612,14 +629,14 @@ document.getElementById('ringLegend').innerHTML=
 
 months.map((m,i)=>{
 
-const pct=sum3>0?(totals[i]/sum3*100):0;
+const pctVsIncome=incomes[i]>0?(totals[i]/incomes[i]*100):0;
 
 return `
 <div class="ringLegendRow">
 <span class="ringDot" style="background:${colors[i]}"></span>
 <div class="ringLegendMain">
 <div class="ringLegendMonth">${monthShortLabel(m)}</div>
-<div class="ringLegendPct">${pct.toFixed(0)}% dari 3 bulan</div>
+<div class="ringLegendPct">${pctVsIncome.toFixed(0)}% dari pemasukan</div>
 <div class="ringLegendSisa ${sisas[i]<0?'red':'green'}">Sisa ${money(sisas[i])}</div>
 </div>
 <div class="ringLegendAmount">${money(totals[i])}</div>
