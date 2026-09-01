@@ -594,6 +594,11 @@ const sisas=months.map((m,i)=>incomes[i]-totals[i]);
 
 const sisa3=sisas.reduce((a,b)=>a+b,0);
 
+const income3=incomes.reduce((a,b)=>a+b,0);
+
+document.getElementById('ringIncome').textContent=
+`Pemasukan ${money(income3)}`;
+
 const sisaEl=document.getElementById('ringSisa');
 
 sisaEl.textContent=`Sisa ${money(sisa3)}`;
